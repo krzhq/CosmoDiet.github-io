@@ -1,0 +1,9 @@
+# Ignore .env file with API keys
+AEROSPACE SITE/.env
+
+# IDE settings
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc

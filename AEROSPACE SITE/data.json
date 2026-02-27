@@ -1,0 +1,916 @@
+{
+  "users": [
+    {
+      "id": "fd85fe5e45da4baa8df7ee2df0a88700",
+      "name": "123123",
+      "email": "123123@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "04.02.2026, 23:32:20",
+      "tokens": [
+        "bf94004e44ee47a382a94598a9e703af"
+      ],
+      "bio_history": [],
+      "diet_history": [
+        {
+          "date": "20.02.2026, 22:58",
+          "height": 100.0,
+          "weight": 83.0,
+          "age": 83,
+          "activity": "Низкая",
+          "gravity": "Марсианская гравитация",
+          "calories": 1191,
+          "protein": 89,
+          "fat": 33,
+          "carbs": 134,
+          "recommendedFoods": [
+            "Обезвоженные фрукты",
+            "Сублимированная курица",
+            "Сублимированный творог",
+            "Омега-3 капсулы",
+            "Ореховые пасты",
+            "Лиофилизированные овощи"
+          ]
+        },
+        {
+          "date": "20.02.2026, 23:00",
+          "height": 55.0,
+          "weight": 88.0,
+          "age": 38,
+          "activity": "Средняя",
+          "gravity": "Марсианская гравитация",
+          "calories": 1530,
+          "protein": 115,
+          "fat": 42,
+          "carbs": 172,
+          "recommendedFoods": [
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Лиофилизированные овощи",
+            "Энергетические батончики",
+            "Обезвоженные фрукты",
+            "Сублимированная курица"
+          ]
+        },
+        {
+          "date": "20.02.2026, 23:58",
+          "height": 170.0,
+          "weight": 45.0,
+          "age": 35,
+          "activity": "Средняя",
+          "gravity": "Марсианская гравитация",
+          "calories": 1977,
+          "protein": 148,
+          "fat": 55,
+          "carbs": 222,
+          "recommendedFoods": [
+            "Витаминные комплексы",
+            "Протеиновые коктейли",
+            "Лиофилизированные овощи",
+            "Минерализованная вода",
+            "Ореховые пасты",
+            "Сублимированная курица"
+          ]
+        }
+      ],
+      "telegram_id": 1044185580
+    },
+    {
+      "id": "c01ac430fc1d4f1ea574da35e12b2c84",
+      "name": "mat",
+      "email": "user@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "05.02.2026, 00:51:10",
+      "tokens": [
+        "f2ccf528c21845e79708105f63666457"
+      ],
+      "bio_history": [],
+      "diet_history": [],
+      "telegram_id": 1044185580
+    },
+    {
+      "id": "18215dc88e814033b1850554f5e1cbf1",
+      "name": "mattt",
+      "email": "userrr@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "05.02.2026, 00:52:23",
+      "tokens": [
+        "96cb4a5a8c1741abbd644f79edb78e6b"
+      ],
+      "bio_history": [
+        {
+          "id": 1770234784289,
+          "userId": "18215dc88e814033b1850554f5e1cbf1",
+          "date": "05.02.2026, 00:53:04",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1770234785624,
+          "userId": "18215dc88e814033b1850554f5e1cbf1",
+          "date": "05.02.2026, 00:53:05",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        }
+      ],
+      "diet_history": [
+        {
+          "id": 1770234785623,
+          "userId": "18215dc88e814033b1850554f5e1cbf1",
+          "date": "05.02.2026, 00:53:05",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Лиофилизированные овощи",
+            "Ореховые пасты",
+            "Сублимированная курица",
+            "Минерализованная вода"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        }
+      ],
+      "telegram_id": 1044185580
+    },
+    {
+      "id": "39deafc8fb0742ce98a40a5fbf3f3af6",
+      "name": "123123123",
+      "email": "123123123@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "05.02.2026, 00:56:07",
+      "tokens": [
+        "b87542dd68fd4781bfcf56ea6d8c049c"
+      ],
+      "bio_history": [],
+      "diet_history": []
+    },
+    {
+      "id": "80c0f79f310b4fe4886bdcff388c3033",
+      "name": "123123123",
+      "email": "1231231233@gmail.com",
+      "password": "123123",
+      "password_hash": "bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a",
+      "regDate": "05.02.2026, 00:57:42",
+      "tokens": [
+        "0a0a0714d9f54411bd77d9e93f2641c4"
+      ],
+      "bio_history": [],
+      "diet_history": []
+    },
+    {
+      "id": "f1df44f625944c4d8c0c5952dde33c4e",
+      "name": "123123",
+      "email": "123123a@gmail.com",
+      "password": "111222",
+      "password_hash": "92c7d71b95dc6540fc58e891dbe649fe72ae5e93b5f42fd7fbdeefe6cef3e51d",
+      "regDate": "05.02.2026, 01:01:00",
+      "tokens": [
+        "4a8caf2dbc654ada8cdba0f3ea6b1f26"
+      ],
+      "bio_history": [
+        {
+          "id": 1770235273962,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:13",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1770235274855,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:14",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1770235274999,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:14",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1770235275163,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:15",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771257176949,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "16.02.2026, 20:52:56",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771257178120,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "16.02.2026, 20:52:58",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        }
+      ],
+      "diet_history": [
+        {
+          "id": 1770235274854,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:14",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Минерализованная вода",
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Обезвоженные фрукты",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1770235274998,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:14",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Минерализованная вода",
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Обезвоженные фрукты",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1770235275163,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:15",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Минерализованная вода",
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Обезвоженные фрукты",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1770235275315,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "05.02.2026, 01:01:15",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Минерализованная вода",
+            "Витаминные комплексы",
+            "Омега-3 капсулы",
+            "Обезвоженные фрукты",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1771257178120,
+          "userId": "f1df44f625944c4d8c0c5952dde33c4e",
+          "date": "16.02.2026, 20:52:58",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Витаминные комплексы",
+            "Сублимированная курица",
+            "Лиофилизированные овощи",
+            "Сублимированный творог",
+            "Омега-3 капсулы",
+            "Ореховые пасты"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        }
+      ],
+      "telegram_id": 1044185580
+    },
+    {
+      "id": "a9f7af291de94eef8d89318fd1735b6a",
+      "name": "123",
+      "email": "123123123a@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "16.02.2026, 22:01:02",
+      "tokens": [
+        "bdd8b7a9cbf64db89be7b5a3a616ecb8",
+        "811da219afd44144a4f681136cee12bb"
+      ],
+      "bio_history": [
+        {
+          "id": 1771261347573,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "16.02.2026, 22:02:27",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771261348658,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "16.02.2026, 22:02:28",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771580091697,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "20.02.2026, 14:34:51",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771580092611,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "20.02.2026, 14:34:52",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771613521088,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "20.02.2026, 23:52:01",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        },
+        {
+          "id": 1771951177687,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "24.02.2026, 21:39:37",
+          "height": "180",
+          "weight": "75",
+          "age": "35",
+          "pulse": "72",
+          "activity": "1.375",
+          "missionDuration": "90",
+          "gravity": "1",
+          "stressLevel": "1.1"
+        }
+      ],
+      "diet_history": [
+        {
+          "id": 1771261348364,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "16.02.2026, 22:02:28",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Сублимированная курица",
+            "Минерализованная вода",
+            "Омега-3 капсулы",
+            "Сублимированный творог",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1771261348520,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "16.02.2026, 22:02:28",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Сублимированная курица",
+            "Минерализованная вода",
+            "Омега-3 капсулы",
+            "Сублимированный творог",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1771261348658,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "16.02.2026, 22:02:28",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Сублимированная курица",
+            "Минерализованная вода",
+            "Омега-3 капсулы",
+            "Сублимированный творог",
+            "Энергетические батончики",
+            "Лиофилизированные овощи"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        },
+        {
+          "id": 1771580092610,
+          "userId": "a9f7af291de94eef8d89318fd1735b6a",
+          "date": "20.02.2026, 14:34:52",
+          "calories": "2192",
+          "protein": "164",
+          "fat": "61",
+          "carbs": "247",
+          "recommendedFoods": [
+            "Обезвоженные фрукты",
+            "Минерализованная вода",
+            "Ореховые пасты",
+            "Энергетические батончики",
+            "Лиофилизированные овощи",
+            "Сублимированный творог"
+          ],
+          "params": {
+            "height": "180",
+            "weight": "75",
+            "age": "35",
+            "missionDuration": "90",
+            "gravity": "1"
+          }
+        }
+      ],
+      "telegram_id": 1044185580,
+      "detection_sessions": [
+        {
+          "id": 1771613605612,
+          "date": "20.02.2026, 23:53:25",
+          "detections": [
+            {
+              "timestamp": "2026-02-20T18:53:06.786Z",
+              "frame": 1,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:07.539Z",
+              "frame": 25,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:07.832Z",
+              "frame": 30,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:08.259Z",
+              "frame": 51,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 2
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:09.072Z",
+              "frame": 77,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:09.337Z",
+              "frame": 82,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:09.832Z",
+              "frame": 106,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:10.618Z",
+              "frame": 130,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 2
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:10.885Z",
+              "frame": 133,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:11.376Z",
+              "frame": 155,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:12.391Z",
+              "frame": 182,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 2
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:13.711Z",
+              "frame": 231,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:13.938Z",
+              "frame": 232,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:14.365Z",
+              "frame": 253,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:15.495Z",
+              "frame": 285,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:15.900Z",
+              "frame": 303,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:16.748Z",
+              "frame": 330,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:16.965Z",
+              "frame": 332,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:17.470Z",
+              "frame": 355,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:18.220Z",
+              "frame": 379,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:18.550Z",
+              "frame": 385,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:18.953Z",
+              "frame": 405,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:19.779Z",
+              "frame": 433,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:20.034Z",
+              "frame": 437,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:20.473Z",
+              "frame": 460,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:21.572Z",
+              "frame": 494,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:21.981Z",
+              "frame": 515,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T18:53:25.439Z",
+              "frame": 1,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 2
+              }
+            }
+          ],
+          "total_frames": 28
+        },
+        {
+          "id": 1771614624755,
+          "date": "21.02.2026, 00:10:24",
+          "detections": [
+            {
+              "timestamp": "2026-02-20T19:10:19.016Z",
+              "frame": 1,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T19:10:19.405Z",
+              "frame": 2,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T19:10:20.143Z",
+              "frame": 6,
+              "model": "can_defect",
+              "model_name": "CanDefect Detector",
+              "detections": {
+                "Rusted": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T19:10:20.582Z",
+              "frame": 7,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 1
+              }
+            },
+            {
+              "timestamp": "2026-02-20T19:10:21.501Z",
+              "frame": 11,
+              "model": "mold_detector",
+              "model_name": "Mold Detector",
+              "detections": {
+                "clock": 1
+              }
+            }
+          ],
+          "total_frames": 5
+        }
+      ]
+    },
+    {
+      "id": "4f5f89a0506d467196f75e0f6fe7dd96",
+      "name": "iamuser",
+      "email": "123123123123@gmail.com",
+      "password": "123123",
+      "password_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+      "regDate": "27.02.2026, 23:48:53",
+      "tokens": [
+        "d3d195601a354e0584556d685c288880"
+      ],
+      "bio_history": [],
+      "diet_history": []
+    }
+  ]
+}

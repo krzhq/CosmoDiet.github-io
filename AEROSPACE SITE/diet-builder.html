@@ -1,0 +1,3115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosmoDiet - Конструктор рациона</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Темная тема */
+            --dark-bg: #0a0e17;
+            --dark-accent: #00d9ff;
+            --dark-accent2: #9d4edd;
+            --dark-text: #e0e7ff;
+            --dark-card: rgba(16, 23, 41, 0.8);
+            
+            /* Светлая тема */
+            --light-bg: #f4f7ff;
+            --light-card: rgba(255, 255, 255, 0.9);
+            --light-text: #0b1220;
+            --light-accent: #0b5bff;
+            --light-accent2: #7b3dff;
+            --light-gradient:
+                radial-gradient(1200px 800px at 10% -10%, rgba(224, 235, 255, 0.9) 0%, rgba(224, 235, 255, 0) 60%),
+                radial-gradient(900px 700px at 90% 10%, rgba(214, 230, 255, 0.8) 0%, rgba(214, 230, 255, 0) 60%),
+                linear-gradient(135deg, #f7f9ff 0%, #e9efff 50%, #dfe7ff 100%);
+            
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s ease;
+            --glow: 0 0 15px rgba(0, 217, 255, 0.7);
+            --shadow-soft-light: 0 12px 30px rgba(16, 31, 70, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a1f3c 50%, #0d152e 100%);
+            color: var(--dark-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body.light-theme {
+            background: var(--light-gradient);
+            color: var(--light-text);
+            --glass: rgba(0, 0, 0, 0.04);
+            --glass-border: rgba(0, 0, 0, 0.12);
+            --glow: 0 0 20px rgba(27, 91, 255, 0.35);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 12px 0;
+            backdrop-filter: blur(15px);
+            background: rgba(10, 14, 23, 0.95);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-theme header {
+            background: rgba(248, 249, 255, 0.95);
+            border-bottom-color: rgba(11, 91, 255, 0.15);
+            box-shadow: 0 5px 20px rgba(16, 31, 70, 0.1);
+        }
+
+        .header-container {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--dark-accent), var(--dark-accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            animation: pulse 2s infinite;
+        }
+
+        /* LIGHT THEME - LOGO */
+        body.light-theme .logo {
+            background: linear-gradient(90deg, var(--light-accent), var(--light-accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-space {
+            flex: 1;
+        }
+
+        .btn-home {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 217, 255, 0.25);
+            background: rgba(10, 20, 45, 0.7);
+            color: #00d9ff;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .btn-home:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(123, 61, 255, 0.15));
+            border-color: rgba(0, 217, 255, 0.6);
+            box-shadow: 0 8px 20px rgba(0, 217, 255, 0.25), inset 0 0 10px rgba(0, 217, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* LIGHT THEME - HOME BUTTON */
+        body.light-theme .btn-home {
+            border-color: rgba(11, 91, 255, 0.3);
+            background: rgba(11, 91, 255, 0.08);
+            color: var(--light-accent);
+        }
+
+        body.light-theme .btn-home:hover {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.15), rgba(123, 61, 255, 0.1));
+            border-color: var(--light-accent);
+            box-shadow: 0 8px 20px rgba(11, 91, 255, 0.2), inset 0 0 10px rgba(11, 91, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .theme-toggle, .language-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--dark-text);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before, .language-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .theme-toggle:hover::before, .language-toggle:hover::before {
+            left: 100%;
+        }
+
+        body.light-theme .theme-toggle,
+        body.light-theme .language-toggle {
+            color: var(--light-text);
+        }
+
+        .theme-toggle:hover, .language-toggle:hover {
+            background: var(--glass);
+            border-color: var(--dark-accent);
+            box-shadow: var(--glow);
+            transform: translateY(-3px);
+        }
+
+        body.light-theme .theme-toggle, 
+        body.light-theme .language-toggle {
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--light-text);
+        }
+
+        body.light-theme .theme-toggle:hover,
+        body.light-theme .language-toggle:hover {
+            border-color: var(--light-accent);
+        }
+
+        .language-dropdown {
+            position: relative;
+        }
+
+        .language-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(10, 14, 23, 0.98);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            min-width: 150px;
+            display: none;
+            flex-direction: column;
+            gap: 0;
+            padding: 8px;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-theme .language-menu {
+            background: rgba(248, 249, 255, 0.98);
+            border-color: rgba(11, 91, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(16, 31, 70, 0.15);
+        }
+
+        .language-menu.active {
+            display: flex;
+        }
+
+        .language-option {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+
+        body.light-theme .language-option {
+            color: rgba(11, 20, 32, 0.7);
+        }
+
+        .language-option.active,
+        .language-option:hover {
+            background: rgba(0, 217, 255, 0.15);
+            color: #00d9ff;
+        }
+
+        body.light-theme .language-option.active,
+        body.light-theme .language-option:hover {
+            background: rgba(11, 91, 255, 0.15);
+            color: #0b5bff;
+        }
+
+        .language-option img {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        /* LIGHT THEME - INLINE STYLE OVERRIDES */
+        body.light-theme [style*="color: #00d9ff"],
+        body.light-theme [style*="color:#00d9ff"] {
+            color: var(--light-accent) !important;
+        }
+
+        body.light-theme [style*="color: #9d4edd"],
+        body.light-theme [style*="color:#9d4edd"] {
+            color: var(--light-accent2) !important;
+        }
+
+        body.light-theme [style*="color: rgba(224, 231, 255"],
+        body.light-theme [style*="color:rgba(224, 231, 255"] {
+            color: rgba(11, 20, 32, 0.75) !important;
+        }
+
+        body.light-theme [style*="background: rgba(0, 0, 0"],
+        body.light-theme [style*="background:rgba(0, 0, 0"] {
+            background: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* GENERAL TEXT ELEMENTS - LIGHT THEME */
+        body.light-theme h1,
+        body.light-theme h2,
+        body.light-theme h3,
+        body.light-theme h4,
+        body.light-theme h5,
+        body.light-theme h6,
+        body.light-theme label,
+        body.light-theme p {
+            color: var(--light-text);
+        }
+
+        /* LIGHT THEME - GLOW REDUCTION FOR QUALITY CHECK BLOCK */
+        body.light-theme [style*="text-shadow: 0 0 20px"],
+        body.light-theme [style*="text-shadow:0 0 20px"] {
+            text-shadow: 0 0 3px rgba(77, 195, 255, 0.4) !important;
+        }
+
+        body.light-theme [style*="filter: drop-shadow"],
+        body.light-theme [style*="filter:drop-shadow"] {
+            filter: drop-shadow(0 0 2px rgba(77, 195, 255, 0.2)) !important;
+        }
+
+        body.light-theme .quality-model-card i {
+            text-shadow: 0 0 3px rgba(77, 195, 255, 0.3) !important;
+            filter: drop-shadow(0 0 2px rgba(77, 195, 255, 0.15)) !important;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 140px 32px 80px;
+            min-height: 100vh;
+        }
+
+        /* ПРОГРЕСС С ЭТАПАМИ */
+        .progress-container {
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .steps-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .step-circle {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            color: rgba(0, 217, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 5;
+            margin: 0 auto;
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 0 20px rgba(0, 217, 255, 0.1);
+        }
+
+        .step-circle i {
+            font-size: 1.5rem;
+            text-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+        }
+
+        .step-circle.active {
+            background: linear-gradient(135deg, var(--dark-accent), var(--dark-accent2));
+            color: white;
+            border-color: var(--dark-accent);
+            box-shadow: 0 0 35px rgba(0, 217, 255, 0.8), inset 0 0 20px rgba(0, 217, 255, 0.3);
+            transform: scale(1.25);
+            backdrop-filter: blur(15px);
+        }
+
+        .step-circle.completed {
+            background: rgba(0, 217, 255, 0.2);
+            color: var(--dark-accent);
+            border-color: var(--dark-accent);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: rgba(0, 217, 255, 0.5);
+            margin-top: 8px;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .step-circle.active ~ .step-label,
+        .step-circle.completed ~ .step-label {
+            color: var(--dark-accent);
+        }
+
+        /* ПРОГРЕСС ПОЛОСА */
+        .progress-bar-container {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(0, 217, 255, 0.1);
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dark-accent), var(--dark-accent2), var(--dark-accent));
+            border-radius: 2px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, var(--dark-accent), var(--dark-accent2));
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.8);
+        }
+
+        /* LIGHT THEME - STEP STYLES */
+        body.light-theme .step-circle {
+            background: rgba(11, 91, 255, 0.06);
+            border-color: rgba(11, 91, 255, 0.25);
+            color: rgba(11, 91, 255, 0.6);
+            box-shadow: inset 0 0 20px rgba(11, 91, 255, 0.08);
+        }
+
+        body.light-theme .step-circle i {
+            text-shadow: 0 0 12px rgba(11, 91, 255, 0.3);
+        }
+
+        body.light-theme .step-circle.active {
+            background: linear-gradient(135deg, var(--light-accent), var(--light-accent2));
+            color: white;
+            border-color: var(--light-accent);
+            box-shadow: 0 0 35px rgba(11, 91, 255, 0.6), inset 0 0 20px rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .step-circle.completed {
+            background: rgba(11, 91, 255, 0.15);
+            color: var(--light-accent);
+            border-color: var(--light-accent);
+            box-shadow: 0 0 15px rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .step-label {
+            color: rgba(11, 91, 255, 0.5);
+        }
+
+        body.light-theme .step-circle.active ~ .step-label,
+        body.light-theme .step-circle.completed ~ .step-label {
+            color: var(--light-accent);
+        }
+
+        body.light-theme .progress-bar-container {
+            background: rgba(11, 91, 255, 0.1);
+        }
+
+        body.light-theme .progress-bar-fill {
+            background: linear-gradient(90deg, var(--light-accent), var(--light-accent2), var(--light-accent));
+            box-shadow: 0 0 20px rgba(11, 91, 255, 0.5);
+        }
+
+        body.light-theme .progress-bar-fill::after {
+            background: linear-gradient(135deg, var(--light-accent), var(--light-accent2));
+            box-shadow: 0 0 15px rgba(11, 91, 255, 0.6);
+        }
+
+        /* КОНТЕНТ ШАГОВ */
+        .wizard-content {
+            min-height: 500px;
+        }
+
+        .step-content {
+            display: none;
+            opacity: 0;
+            animation: fadeInSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .step-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, var(--dark-accent), var(--dark-accent2), var(--dark-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
+        }
+
+        body.light-theme .step-title {
+            background: linear-gradient(90deg, var(--light-accent), var(--light-accent2), var(--light-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-subtitle {
+            font-size: 1.05rem;
+            color: rgba(224, 231, 255, 0.7);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        body.light-theme .step-subtitle {
+            color: rgba(11, 20, 32, 0.75);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(123, 61, 255, 0.08));
+            border: 2px solid rgba(0, 217, 255, 0.25);
+            border-radius: 28px;
+            padding: 32px 24px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 217, 255, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
+            pointer-events: none;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(0, 217, 255, 0.6);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.18), rgba(123, 61, 255, 0.15));
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .card.selected {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.3), rgba(123, 61, 255, 0.25));
+            border: 2px solid var(--dark-accent);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.5), inset 0 0 20px rgba(0, 217, 255, 0.15);
+        }
+
+        .card-icon {
+            font-size: 3.2rem;
+            margin-bottom: 16px;
+            color: var(--dark-accent);
+            filter: drop-shadow(0 0 12px rgba(0, 217, 255, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: rgba(224, 231, 255, 0.6);
+            line-height: 1.3;
+        }
+
+        /* LIGHT THEME - CARD STYLES */
+        body.light-theme .card {
+            background: var(--light-card);
+            border-color: rgba(11, 91, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(11, 91, 255, 0.08), inset 0 1px 1px rgba(11, 91, 255, 0.08);
+        }
+
+        body.light-theme .card::before {
+            background: linear-gradient(90deg, transparent, rgba(11, 91, 255, 0.1), transparent);
+        }
+
+        body.light-theme .card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(11, 91, 255, 0.5);
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.1), rgba(123, 61, 255, 0.08));
+            box-shadow: 0 20px 50px rgba(11, 91, 255, 0.2), inset 0 1px 1px rgba(11, 91, 255, 0.1);
+        }
+
+        body.light-theme .card.selected {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.15), rgba(123, 61, 255, 0.12));
+            border-color: var(--light-accent);
+            box-shadow: 0 0 30px rgba(11, 91, 255, 0.35), inset 0 0 20px rgba(11, 91, 255, 0.08);
+        }
+
+        body.light-theme .card-icon {
+            color: var(--light-accent);
+            filter: drop-shadow(0 0 12px rgba(11, 91, 255, 0.4));
+        }
+
+        body.light-theme .card-title {
+            color: var(--light-text);
+        }
+
+        body.light-theme .card-desc {
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        /* ПРОДУКТЫ */
+        .products-list {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(0, 217, 255, 0.2);
+            border-radius: 14px;
+            color: var(--dark-text);
+            font-family: 'Exo 2', Arial, sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--dark-accent);
+            background: rgba(0, 217, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: rgba(224, 231, 255, 0.4);
+        }
+
+        /* LIGHT THEME - INPUT STYLES */
+        body.light-theme .search-input {
+            background: rgba(11, 91, 255, 0.05);
+            border-color: rgba(11, 91, 255, 0.2);
+            color: var(--light-text);
+        }
+
+        body.light-theme .search-input:focus {
+            border-color: var(--light-accent);
+            background: rgba(11, 91, 255, 0.1);
+            box-shadow: 0 0 20px rgba(11, 91, 255, 0.15);
+        }
+
+        body.light-theme .search-input::placeholder {
+            color: rgba(11, 20, 32, 0.4);
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(0,217,255,0.04));
+            border: 2px solid rgba(0, 217, 255, 0.25);
+            border-radius: 18px;
+            padding: 18px 20px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 14px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 16px rgba(0, 217, 255, 0.08);
+        }
+
+        .product-card:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(123, 61, 255, 0.1));
+            border-color: var(--dark-accent);
+            transform: translateX(6px);
+            box-shadow: 0 12px 35px rgba(0, 217, 255, 0.25);
+        }
+
+        .product-card.selected {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: var(--dark-accent);
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+        }
+
+        /* LIGHT THEME - PRODUCT CARD STYLES */
+        body.light-theme .product-card {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.06), rgba(123, 61, 255, 0.03));
+            border-color: rgba(11, 91, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(11, 91, 255, 0.06);
+        }
+
+        body.light-theme .product-card:hover {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.12), rgba(123, 61, 255, 0.08));
+            border-color: var(--light-accent);
+            box-shadow: 0 12px 35px rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .product-card.selected {
+            background: rgba(11, 91, 255, 0.15);
+            border-color: var(--light-accent);
+            box-shadow: 0 0 25px rgba(11, 91, 255, 0.3);
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--dark-accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--dark-accent);
+            transition: var(--transition);
+        }
+
+        .product-card.selected .checkbox {
+            background: linear-gradient(135deg, var(--dark-accent), var(--dark-accent2));
+            color: white;
+            box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+
+        .product-meta {
+            font-size: 0.8rem;
+            color: rgba(224, 231, 255, 0.5);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .product-kcal {
+            color: var(--dark-accent);
+            font-weight: 600;
+        }
+
+        /* LIGHT THEME - PRODUCT STYLES */
+        body.light-theme .product-name {
+            color: var(--light-text);
+        }
+
+        body.light-theme .product-meta {
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        body.light-theme .product-kcal {
+            color: var(--light-accent);
+        }
+
+        /* СЕКЦИИ */
+        .section {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(123, 61, 255, 0.06));
+            border: 2px solid rgba(0, 217, 255, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            color: var(--dark-accent);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: rgba(224, 231, 255, 0.6);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        /* LIGHT THEME - SECTION STYLES */
+        body.light-theme .section {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.06), rgba(123, 61, 255, 0.04));
+            border-color: rgba(11, 91, 255, 0.15);
+        }
+
+        body.light-theme .section-title {
+            color: var(--light-accent);
+        }
+
+        body.light-theme .section-subtitle {
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        /* ВКЛАДКИ */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 16px;
+            background: transparent;
+            border: 2px solid rgba(0, 217, 255, 0.2);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            color: rgba(224, 231, 255, 0.6);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab:hover {
+            color: var(--dark-accent);
+            border-color: rgba(0, 217, 255, 0.4);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(123, 61, 255, 0.15));
+            border-color: var(--dark-accent);
+            color: var(--dark-accent);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* LIGHT THEME - TAB STYLES */
+        body.light-theme .tabs {
+            border-bottom-color: rgba(11, 91, 255, 0.15);
+        }
+
+        body.light-theme .tab {
+            border-color: rgba(11, 91, 255, 0.2);
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        body.light-theme .tab:hover {
+            color: var(--light-accent);
+            border-color: rgba(11, 91, 255, 0.4);
+        }
+
+        body.light-theme .tab.active {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.15), rgba(123, 61, 255, 0.1));
+            border-color: var(--light-accent);
+            color: var(--light-accent);
+            box-shadow: 0 0 20px rgba(11, 91, 255, 0.15);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ПИТАНИЕ СЕТКА */
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .nutrition-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(123, 61, 255, 0.08));
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 18px;
+            padding: 22px 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 217, 255, 0.1);
+        }
+
+        .nutrition-label {
+            font-size: 0.8rem;
+            color: rgba(224, 231, 255, 0.6);
+            margin-bottom: 6px;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .nutrition-value {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--dark-accent);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+        }
+
+        /* ML СКОР */
+        .ml-score-box {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(123, 61, 255, 0.08));
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--dark-accent), var(--dark-accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-text {
+            font-size: 1.1rem;
+            color: rgba(224, 231, 255, 0.8);
+            margin: 12px 0;
+            font-weight: 600;
+        }
+
+        .score-tips {
+            font-size: 0.95rem;
+            color: rgba(224, 231, 255, 0.6);
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        /* LIGHT THEME - NUTRITION STYLES */
+        body.light-theme .nutrition-card {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.08), rgba(123, 61, 255, 0.06));
+            border-color: rgba(11, 91, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(11, 91, 255, 0.08);
+        }
+
+        body.light-theme .nutrition-label {
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        body.light-theme .nutrition-value {
+            color: var(--light-accent);
+            text-shadow: 0 0 15px rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .ml-score-box {
+            background: linear-gradient(135deg, rgba(11, 91, 255, 0.08), rgba(123, 61, 255, 0.06));
+            border-color: rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .score-number {
+            background: linear-gradient(90deg, var(--light-accent), var(--light-accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.light-theme .score-text {
+            color: rgba(11, 20, 32, 0.8);
+        }
+
+        body.light-theme .score-tips {
+            color: rgba(11, 20, 32, 0.6);
+        }
+
+        /* КНОПКИ */
+        .controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+            pointer-events: none;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--dark-accent), var(--dark-accent2));
+            color: white;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 45px rgba(0, 217, 255, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            color: var(--dark-accent);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 217, 255, 0.15);
+            border-color: var(--dark-accent);
+            box-shadow: 0 8px 25px rgba(0, 217, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* LIGHT THEME - BUTTON STYLES */
+        body.light-theme .btn-primary {
+            background: linear-gradient(135deg, var(--light-accent), var(--light-accent2));
+            box-shadow: 0 0 25px rgba(11, 91, 255, 0.4), inset 0 1px 1px rgba(11, 91, 255, 0.2);
+        }
+
+        body.light-theme .btn-primary:hover {
+            box-shadow: 0 15px 45px rgba(11, 91, 255, 0.5), inset 0 1px 1px rgba(11, 91, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        body.light-theme .btn-secondary {
+            background: rgba(11, 91, 255, 0.08);
+            border-color: rgba(11, 91, 255, 0.3);
+            color: var(--light-accent);
+        }
+
+        body.light-theme .btn-secondary:hover {
+            background: rgba(11, 91, 255, 0.15);
+            border-color: var(--light-accent);
+            box-shadow: 0 8px 25px rgba(11, 91, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ВИДЕО КАМЕРА */
+        #cameraVideo {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: none;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            background: #000;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        #detectionCanvas {
+            display: none;
+        }
+
+        #cameraVideo.active {
+            display: block;
+        }
+
+        #detectionCanvas.active {
+            display: block;
+        }
+
+        .quality-model-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(157, 78, 221, 0.05));
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 28px;
+            padding: 28px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 0 40px rgba(0, 217, 255, 0.12),
+                inset 0 0 20px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0px rgba(255, 255, 255, 0.2),
+                0 0 0 1px rgba(0, 217, 255, 0.15);
+        }
+
+        .quality-model-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 217, 255, 0.2), transparent 70%);
+            pointer-events: none;
+            animation: pulse-light 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-light {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .quality-model-card:hover {
+            border-color: rgba(0, 217, 255, 0.6);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.12), rgba(157, 78, 221, 0.08));
+            transform: translateY(-6px);
+            box-shadow: 
+                0 0 50px rgba(0, 217, 255, 0.3),
+                inset 0 0 25px rgba(0, 217, 255, 0.15),
+                inset 0 1px 0px rgba(255, 255, 255, 0.3),
+                0 15px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .quality-model-card.active {
+            border-color: rgba(0, 217, 255, 0.8);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(157, 78, 221, 0.15));
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            box-shadow: 
+                0 0 60px rgba(0, 217, 255, 0.5),
+                inset 0 0 30px rgba(0, 217, 255, 0.25),
+                inset 0 1px 0px rgba(255, 255, 255, 0.4),
+                0 0 40px rgba(157, 78, 221, 0.3),
+                0 0 80px rgba(0, 217, 255, 0.2);
+        }
+
+        .quality-model-card.active::after {
+            content: '✓';
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            color: #00d9ff;
+            font-weight: bold;
+            font-size: 1.6rem;
+            text-shadow: 0 0 15px rgba(0, 217, 255, 0.8), 0 0 30px rgba(0, 217, 255, 0.4);
+            z-index: 2;
+            animation: scale-in 0.3s ease-out;
+        }
+
+        @keyframes scale-in {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .detection-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 16px 0;
+            color: var(--dark-text);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: rgba(224, 231, 255, 0.5);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--dark-accent);
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 16px 40px;
+            }
+
+            .step-title {
+                font-size: 1.6rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .steps-tracker {
+                gap: 4px;
+            }
+
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 0.8rem;
+            }
+
+            .step-label {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-rocket"></i>CosmoDiet
+            </a>
+            <div class="nav-space"></div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle" title="Переключить тему">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="language-dropdown">
+                    <button class="language-toggle" id="languageToggle" title="Выбрать язык">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <div class="language-menu" id="languageMenu">
+                        <div class="language-option active" data-lang="ru">
+                            <img src="https://flagcdn.com/w40/ru.png" alt="Русский">
+                            <span>Русский</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <img src="https://flagcdn.com/w40/gb.png" alt="English">
+                            <span>English</span>
+                        </div>
+                        <div class="language-option" data-lang="kz">
+                            <img src="https://flagcdn.com/w40/kz.png" alt="Қазақша">
+                            <span>Қазақша</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="index.html" class="btn-home">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ПРОГРЕСС ЭТАПОВ -->
+        <div class="progress-container">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div class="steps-tracker">
+                <div class="step-indicator">
+                    <div class="step-circle active" id="circle-1"><i class="fas fa-utensils"></i></div>
+                    <div class="step-label">Категория</div>
+                </div>
+                <div class="step-indicator">
+                    <div class="step-circle" id="circle-2"><i class="fas fa-box"></i></div>
+                    <div class="step-label">Продукты</div>
+                </div>
+                <div class="step-indicator">
+                    <div class="step-circle" id="circle-3"><i class="fas fa-flask"></i></div>
+                    <div class="step-label">Обработка</div>
+                </div>
+                <div class="step-indicator">
+                    <div class="step-circle" id="circle-4"><i class="fas fa-chart-bar"></i></div>
+                    <div class="step-label">Анализ</div>
+                </div>
+                <div class="step-indicator">
+                    <div class="step-circle" id="circle-5"><i class="fas fa-robot"></i></div>
+                    <div class="step-label">Проверка</div>
+                </div>
+                <div class="step-indicator">
+                    <div class="step-circle" id="circle-6"><i class="fas fa-save"></i></div>
+                    <div class="step-label">Сохранить</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КОНТЕНТ ШАГОВ -->
+        <div class="wizard-content">
+            <!-- ШАГ 1: КАТЕГОРИЯ -->
+            <div class="step-content active" id="step-1">
+                <div class="step-title">Категория рациона</div>
+                <div class="step-subtitle">Выберите тип питания для космической миссии</div>
+                <div class="grid" id="categoryGrid"></div>
+            </div>
+
+            <!-- ШАГ 2: ПРОДУКТЫ -->
+            <div class="step-content" id="step-2">
+                <div class="step-title">Выбор продуктов</div>
+                <div class="step-subtitle">Составьте оптимальный рацион из сублимированной еды</div>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Поиск по названию...">
+                </div>
+                <div class="products-list" id="productsList"></div>
+                <div class="empty-state" id="noProducts" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <p>Продукты не найдены</p>
+                </div>
+            </div>
+
+            <!-- ШАГ 3: ОБРАБОТКА -->
+            <div class="step-content" id="step-3">
+                <div class="step-title">Методика обработки</div>
+                <div class="step-subtitle">Все продукты в космосе используют технологию сублимации</div>
+                <div class="section">
+                    <div class="section-subtitle">
+                        <i class="fas fa-snowflake" style="margin-right: 8px;"></i>
+                        <strong>Сублимированные продукты</strong>
+                    </div>
+                    <p style="color: rgba(224, 231, 255, 0.6); line-height: 1.8;">
+                        • Вес порции: на 80% легче обычной<br>
+                        • Восстановление: добавьте воду (5 минут)<br>
+                        • Срок хранения: до 25 лет в вакууме<br>
+                        • ML-бонус: +20 баллов за технологию<br>
+                        • Идеальны для космических полётов
+                    </p>
+                </div>
+            </div>
+
+            <!-- ШАГ 4: АНАЛИЗ -->
+            <div class="step-content" id="step-4">
+                <div class="step-title">Анализ рациона</div>
+                <div class="step-subtitle">ML-скоринг и питательный расчёт</div>
+                
+                <div class="section">
+                    <div class="section-title">Пищевая ценность</div>
+                    <div class="nutrition-grid" id="nutritionGrid"></div>
+                </div>
+
+                <div class="ml-score-box">
+                    <div class="score-number" id="scoreNumber">0</div>
+                    <div class="score-text" id="scoreText">Анализ...</div>
+                    <div class="score-tips" id="scoreTips"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Выбранные продукты</div>
+                    <div id="selectedList" style="max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
+
+            <!-- ШАГ 5: ИИ ПРОВЕРКА -->
+            <div class="step-content" id="step-5">
+                <div class="step-title">Проверка качества продуктов</div>
+                <div class="step-subtitle">ИИ Детектор для анализа состояния консервных банок и продуктов</div>
+
+                <!-- Выбор модели как в index.html -->
+                <div style="margin-bottom: 30px;">
+                    <p style="color: rgba(224, 231, 255, 0.8); margin-bottom: 15px; font-weight: 500;">Выберите тип проверки:</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div id="model-can_defect" class="quality-model-card active" onclick="selectDetectionModel('can_defect')" style="text-align: center;">
+                            <i class="fas fa-triangle-exclamation" style="font-size: 2.5rem; color: #00d9ff; margin-bottom: 12px; display: block; text-shadow: 0 0 20px rgba(0,217,255,0.5); filter: drop-shadow(0 0 10px rgba(0,217,255,0.3));"></i>
+                            <div style="color: #00d9ff; font-weight: 600; margin-bottom: 5px; font-size: 1.1rem;">Дефекты банок</div>
+                            <div style="color: rgba(224,231,255,0.6); font-size: 0.9rem;">Целостность и повреждения</div>
+                        </div>
+                        <div id="model-mold_detector" class="quality-model-card" onclick="selectDetectionModel('mold_detector')" style="text-align: center;">
+                            <i class="fas fa-biohazard" style="font-size: 2.5rem; color: #9d4edd; margin-bottom: 12px; display: block; text-shadow: 0 0 20px rgba(157,78,221,0.5); filter: drop-shadow(0 0 10px rgba(157,78,221,0.3));"></i>
+                            <div style="color: #9d4edd; font-weight: 600; margin-bottom: 5px; font-size: 1.1rem;">Плесень и загрязнения</div>
+                            <div style="color: rgba(224,231,255,0.6); font-size: 0.9rem;">Состояние продукта</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Обыкновенный интерфейс камеры -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <h5 style="color: #00d9ff; margin-bottom: 12px; font-size: 1.1rem;">Видеопоток</h5>
+                        <div id="detectorContainer" style="position: relative; width: 100%; aspect-ratio: 4/3; background: rgba(0,0,0,0.8); border-radius: 12px; overflow: hidden; border: 2px solid rgba(0,217,255,0.4); box-shadow: 0 0 15px rgba(0,217,255,0.2);">
+                            <video id="cameraVideo" style="width: 100%; height: 100%; display: none;"></video>
+                            <canvas id="detectionCanvas" style="width: 100%; height: 100%; display: block;"></canvas>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button id="cameraStartBtn" class="btn btn-primary" onclick="openCamera()" style="flex: 1; padding: 12px;">
+                                <i class="fas fa-play"></i> Запустить
+                            </button>
+                            <button id="cameraStopBtn" class="btn btn-secondary" onclick="closeCamera()" style="flex: 1; padding: 12px;" disabled>
+                                <i class="fas fa-stop"></i> Остановить
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 style="color: #00d9ff; margin-bottom: 12px; font-size: 1.1rem;">Результаты</h5>
+                        <div id="detectionResult" style="background: rgba(0,217,255,0.06); border: 2px solid rgba(0,217,255,0.3); border-radius: 12px; padding: 18px; height: 200px; overflow-y: auto; font-size: 0.95rem; box-shadow: 0 0 10px rgba(0,217,255,0.1);">
+                            <p style="color: rgba(224,231,255,0.6);">✓ Готово к проверке. Нажмите "Запустить"</p>
+                        </div>
+                        <button id="skipBtn" class="btn btn-secondary" onclick="nextStep()" style="width: 100%; margin-top: 15px; padding: 12px;">
+                            <i class="fas fa-arrow-right"></i> Пропустить проверку
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ШАГ 6: СОХРАНЕНИЕ -->
+            <div class="step-content" id="step-6">
+                <div class="step-title">Сохранение рациона</div>
+                <div class="step-subtitle">Завершение создания вашего космического меню</div>
+
+                <div class="section">
+                    <div class="section-title">Полный состав</div>
+                    <div class="nutrition-grid" id="finalNutrition"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Параметры сохранения</div>
+
+                    <label style="display: block; margin-bottom: 12px; color: var(--dark-text); font-weight: 600;">
+                        Название рациона
+                    </label>
+                    <input type="text" id="mealName" class="search-input" placeholder="Например: Завтрак День 1" style="margin-bottom: 20px;">
+
+                    <label style="display: block; margin-bottom: 12px; color: var(--dark-text); font-weight: 600;">
+                        Тип приёма пищи
+                    </label>
+                    <div class="tabs" style="border: none; gap: 12px; margin-bottom: 0;">
+                        <button class="tab active" onclick="setMealType('breakfast')">
+                            <i class="fas fa-sunrise"></i> Завтрак
+                        </button>
+                        <button class="tab" onclick="setMealType('lunch')">
+                            <i class="fas fa-sun"></i> Обед
+                        </button>
+                        <button class="tab" onclick="setMealType('dinner')">
+                            <i class="fas fa-moon"></i> Ужин
+                        </button>
+                        <button class="tab" onclick="setMealType('snack')">
+                            <i class="fas fa-cookie-bite"></i> Перекус
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- УПРАВЛЕНИЕ ШАГАМИ -->
+        <div class="controls">
+            <button class="btn btn-secondary" id="prevBtn" style="display: none;" onclick="prevStep()">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                <i class="fas fa-arrow-right"></i> Далее
+            </button>
+        </div>
+    </div>
+
+    <script>
+        alert('🚀 Скрипт загружается!'); // Это покажет точно загружается ли скрипт
+        console.log('📄 Скрипт diet-builder.html начал загружаться');
+        
+        // ===== ТЕМА И ЯЗЫК =====
+        // Инициализировать тему из localStorage
+        const savedTheme = localStorage.getItem('cosmodiet_theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+        }
+
+        // Обработчик переключения темы
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('light-theme');
+                const icon = this.querySelector('i');
+                const isLight = document.body.classList.contains('light-theme');
+                
+                if (isLight) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('cosmodiet_theme', 'light');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('cosmodiet_theme', 'dark');
+                }
+            });
+            
+            // Установить правильный икон при загрузке
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // Обработчик языкового меню
+        const languageToggle = document.getElementById('languageToggle');
+        const languageMenu = document.getElementById('languageMenu');
+        if (languageToggle && languageMenu) {
+            // Инициализировать язык из localStorage
+            const savedLang = localStorage.getItem('cosmodiet_lang') || 'ru';
+            const languageOptions = languageMenu.querySelectorAll('.language-option');
+            
+            // Установить правильный язык при загрузке
+            languageOptions.forEach(opt => {
+                if (opt.getAttribute('data-lang') === savedLang) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+            
+            languageToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageMenu.classList.toggle('active');
+            });
+
+            // Закрыть меню при клике на опцию
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const lang = this.getAttribute('data-lang');
+                    
+                    // Удалить класс active со всех опций
+                    languageOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Сохранить выбор язык
+                    localStorage.setItem('cosmodiet_lang', lang);
+                    
+                    // Закрыть меню
+                    languageMenu.classList.remove('active');
+                    
+                    // Применить язык на странице
+                    applyLanguage(lang);
+                });
+            });
+
+            // Закрыть меню при клике вне его
+            document.addEventListener('click', function(e) {
+                if (!languageMenu.contains(e.target) && !languageToggle.contains(e.target)) {
+                    languageMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА
+        function applyLanguage(lang) {
+            const t = TRANSLATIONS[lang] || TRANSLATIONS['ru'];
+            
+            // ОБНОВИТЬ ТЕКУЩИЙ ЯЗЫК
+            currentLang = lang;
+            
+            // Обновить кнопку "На главную"
+            const homeBtn = document.querySelector('.btn-home');
+            if (homeBtn) {
+                homeBtn.innerHTML = '<i class="fas fa-home"></i> ' + t.homebutton;
+            }
+            
+            // Обновить текст step titles для ВСЕХ шагов (не только текущего)
+            const stepTitles = {
+                1: { title: t.step1, subtitle: t.step1sub },
+                2: { title: t.step2, subtitle: t.step2sub },
+                3: { title: t.step3, subtitle: t.step3sub },
+                4: { title: t.step4, subtitle: t.step4sub },
+                5: { title: t.step5, subtitle: t.step5sub },
+                6: { title: t.step6, subtitle: t.step6sub }
+            };
+            
+            // Обновить все шаги (step-1 через step-6)
+            for (let i = 1; i <= 6; i++) {
+                const stepContent = document.getElementById('step-' + i);
+                if (stepContent) {
+                    const stepTitle = stepContent.querySelector('.step-title');
+                    const stepSubtitle = stepContent.querySelector('.step-subtitle');
+                    
+                    if (stepTitle && stepTitles[i]) {
+                        stepTitle.textContent = stepTitles[i].title;
+                    }
+                    if (stepSubtitle && stepTitles[i]) {
+                        stepSubtitle.textContent = stepTitles[i].subtitle;
+                    }
+                }
+            }
+            
+            // Обновить поиск placeholder
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+            
+            // Обновить текст "Продукты не найдены"
+            const noProducts = document.getElementById('noProducts');
+            if (noProducts) {
+                const p = noProducts.querySelector('p');
+                if (p) p.textContent = t.noProducts;
+            }
+            
+            // Обновить раздел "Сублимированные продукты" (Шаг 3)
+            const sublimationSection = document.querySelector('#step-3 .section-subtitle strong');
+            if (sublimationSection) sublimationSection.textContent = t.sublimationProductsLabel;
+            
+            // Обновить информацию о продуктах (Шаг 3)
+            const step3Content = document.getElementById('step-3');
+            if (step3Content) {
+                const pTags = step3Content.querySelectorAll('p');
+                if (pTags[0]) {
+                    pTags[0].innerHTML = t.weightInfo + '<br>' + t.rehabInfo + '<br>' + t.storageInfo + '<br>' + t.mlBonus + '<br>' + t.idealSpace;
+                }
+            }
+            
+            // Обновить раздел Анализ (Шаг 4)
+            const step4Content = document.getElementById('step-4');
+            if (step4Content) {
+                const sectionTitles = step4Content.querySelectorAll('.section-title');
+                if (sectionTitles[0]) sectionTitles[0].textContent = t.nutritionValue;
+                if (sectionTitles[1]) sectionTitles[1].textContent = t.selectProducts;
+            }
+            
+            // Обновить раздел Проверка качества (Шаг 5)
+            const step5Content = document.getElementById('step-5');
+            if (step5Content) {
+                const allPTags = step5Content.querySelectorAll('p');
+                if (allPTags.length > 0) {
+                    allPTags[0].textContent = t.selectCheckType;
+                }
+                
+                // Обновить названия моделей
+                const canDefectCard = document.getElementById('model-can_defect');
+                if (canDefectCard) {
+                    const divs = canDefectCard.querySelectorAll('div[style]');
+                    if (divs.length >= 2) {
+                        divs[0].textContent = t.canDefects;
+                        divs[1].textContent = t.canIntegrity;
+                    }
+                }
+                
+                const moldCard = document.getElementById('model-mold_detector');
+                if (moldCard) {
+                    const divs = moldCard.querySelectorAll('div[style]');
+                    if (divs.length >= 2) {
+                        divs[0].textContent = t.moldContamination;
+                        divs[1].textContent = t.productCondition;
+                    }
+                }
+                
+                // Обновить заголовки видео и результатов
+                const h5Tags = step5Content.querySelectorAll('h5');
+                if (h5Tags[0]) h5Tags[0].textContent = t.videoStream;
+                if (h5Tags[1]) h5Tags[1].textContent = t.results;
+                
+                // Обновить кнопки Запустить/Остановить
+                const cameraStartBtn = document.getElementById('cameraStartBtn');
+                if (cameraStartBtn) cameraStartBtn.innerHTML = '<i class="fas fa-play"></i> ' + t.start;
+                
+                const cameraStopBtn = document.getElementById('cameraStopBtn');
+                if (cameraStopBtn) cameraStopBtn.innerHTML = '<i class="fas fa-stop"></i> ' + t.stop;
+                
+                // Обновить кнопку "Пропустить проверку"
+                const skipBtn = document.getElementById('skipBtn');
+                if (skipBtn) skipBtn.innerHTML = '<i class="fas fa-arrow-right"></i> ' + t.skipCheck;
+                
+                // Обновить текст готовности
+                const detectionResult = document.getElementById('detectionResult');
+                if (detectionResult) {
+                    const p = detectionResult.querySelector('p');
+                    if (p) p.textContent = t.readyToCheck;
+                }
+            }
+            
+            // Обновить раздел Сохранение (Шаг 6)
+            const step6Content = document.getElementById('step-6');
+            if (step6Content) {
+                const sectionTitles = step6Content.querySelectorAll('.section-title');
+                if (sectionTitles[0]) sectionTitles[0].textContent = t.foodComposition;
+                if (sectionTitles[1]) sectionTitles[1].textContent = t.settings;
+                
+                const labels = step6Content.querySelectorAll('label');
+                if (labels[0]) labels[0].textContent = t.dietName;
+                if (labels[1]) labels[1].textContent = t.mealType;
+                
+                const input = document.getElementById('mealName');
+                if (input) input.placeholder = t.dietNamePlaceholder;
+            }
+            
+            // Обновить кнопки типов питания (везде)
+            const mealTypeButtons = document.querySelectorAll('.tab');
+            if (mealTypeButtons.length >= 4) {
+                mealTypeButtons[0].innerHTML = '<i class="fas fa-sunrise"></i> ' + t.breakfast;
+                mealTypeButtons[1].innerHTML = '<i class="fas fa-sun"></i> ' + t.lunch;
+                mealTypeButtons[2].innerHTML = '<i class="fas fa-moon"></i> ' + t.dinner;
+                mealTypeButtons[3].innerHTML = '<i class="fas fa-cookie-bite"></i> ' + t.snack;
+            }
+            
+            // Обновить кнопки управления шагами
+            const prevBtn = document.getElementById('prevBtn');
+            if (prevBtn) prevBtn.innerHTML = '<i class="fas fa-arrow-left"></i> ' + t.back;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) nextBtn.innerHTML = '<i class="fas fa-arrow-right"></i> ' + t.next;
+            
+            // Обновить labels макросов везде
+            const nutritionLabels = document.querySelectorAll('.nutrition-label');
+            nutritionLabels.forEach((label, idx) => {
+                if (idx === 0) label.textContent = t.macroEnergy;
+                else if (idx === 1) label.textContent = t.macroProtein;
+                else if (idx === 2) label.textContent = t.macroFat;
+                else if (idx === 3 || idx === 7) label.textContent = t.macroCarbs;
+            });
+            
+            // Обновить step labels (Категория, Продукты, Обработка, Анализ, Проверка, Сохранить)
+            const stepLabels = document.querySelectorAll('.step-label');
+            if (stepLabels.length >= 6) {
+                stepLabels[0].textContent = t.stepLabel1;
+                stepLabels[1].textContent = t.stepLabel2;
+                stepLabels[2].textContent = t.stepLabel3;
+                stepLabels[3].textContent = t.stepLabel4;
+                stepLabels[4].textContent = t.stepLabel5;
+                stepLabels[5].textContent = t.stepLabel6;
+            }
+            
+            // Обновить категории
+            console.log(`→ Обновляю категории на язык: ${lang}`);
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const categoryNames = {
+                    ru: { light: 'Лёгкая еда', strengthen: 'Укрепиться', energy: 'Энергия', recovery: 'Восстановление', hydration: 'Гидратация' },
+                    en: { light: 'Light Food', strengthen: 'Strengthen', energy: 'Energy', recovery: 'Recovery', hydration: 'Hydration' },
+                    kz: { light: 'Жеңіл тамақ', strengthen: 'Нығайтыңыз', energy: 'Энергия', recovery: 'Қалпына келтіру', hydration: 'Суланғандық' }
+                };
+                
+                const categoryDescs = {
+                    ru: { light: 'Белки, овощи', strengthen: 'Сытные блюда', energy: 'Калорийные', recovery: 'Углеводы', hydration: 'Напитки' },
+                    en: { light: 'Proteins, vegetables', strengthen: 'Hearty dishes', energy: 'High-calorie', recovery: 'Carbs', hydration: 'Beverages' },
+                    kz: { light: 'Ағзам дағы, көкөністер', strengthen: 'Сыпайы тағамдар', energy: 'Жоғары калорийлік', recovery: 'Көмірсутектер', hydration: 'Ішімдіктер' }
+                };
+                
+                if (categoryNames[lang] && categoryNames[lang][key]) {
+                    CATEGORIES[key].name = categoryNames[lang][key];
+                }
+                
+                if (categoryDescs[lang] && categoryDescs[lang][key]) {
+                    CATEGORIES[key].desc = categoryDescs[lang][key];
+                }
+            });
+            
+            // Переработать категории (перерисовать их с новыми названиями) - всегда обновляем
+            if (typeof renderCategories === 'function') {
+                renderCategories();
+            }
+            
+            // Если видны продукты (шаг 2), перерисовать их с новыми названиями
+            if (state.step === 2 && typeof renderProducts === 'function') {
+                renderProducts();
+            }
+            
+            // Если видны выбранные продукты (шаг 4), обновить их названия  
+            if (state.step === 4) {
+                const prods = state.products.map(id => PRODUCTS.find(p => p.id === id)).filter(p => p);
+                const selectedListEl = document.getElementById('selectedList');
+                if (selectedListEl) {
+                    selectedListEl.innerHTML = prods.map(p => `
+                        <div style="padding: 12px; background: rgba(0,217,255,0.05); border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #00d9ff;">
+                            <strong>${getProductName(p)}</strong><br>
+                            <span style="font-size: 0.8rem; color: rgba(224,231,255,0.6);">${p.kcal} ккал • Б: ${p.protein}г</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        // ===== БАЗА ДАННЫХ ПРОДУКТОВ (ТОЛЬКО СУБЛИМИРОВАННЫЕ) =====
+        const PRODUCTS = [
+            // ЛЕГКАЯ
+            { id: 1, name: 'Куичное филе сублимированное', category: 'light', kcal: 180, protein: 35, fat: 3, carbs: 0, sodium: 250 },
+            { id: 2, name: 'Форель сублимированная кусочки', category: 'light', kcal: 220, protein: 38, fat: 8, carbs: 0, sodium: 280 },
+            { id: 3, name: 'Овощная смесь сублимированная', category: 'light', kcal: 45, protein: 2, fat: 0, carbs: 10, sodium: 180 },
+            { id: 4, name: 'Шпинат сублимированный', category: 'light', kcal: 55, protein: 5, fat: 1, carbs: 8, sodium: 200 },
+            { id: 5, name: 'Брокколи сублимированная', category: 'light', kcal: 50, protein: 4, fat: 0, carbs: 9, sodium: 150 },
+            { id: 51, name: 'Минтай сублимированный', category: 'light', kcal: 150, protein: 32, fat: 2, carbs: 0, sodium: 200 },
+            { id: 52, name: 'Морковь сублимированная', category: 'light', kcal: 40, protein: 1, fat: 0, carbs: 9, sodium: 140 },
+            { id: 53, name: 'Кабачок сублимированный', category: 'light', kcal: 35, protein: 1, fat: 0, carbs: 8, sodium: 120 },
+
+            // УКРЕПИТЬСЯ
+            { id: 6, name: 'Говядина сублимированная кусочки', category: 'strengthen', kcal: 380, protein: 50, fat: 18, carbs: 0, sodium: 420 },
+            { id: 7, name: 'Картофель пюре сублимированное', category: 'strengthen', kcal: 350, protein: 8, fat: 2, carbs: 70, sodium: 350 },
+            { id: 8, name: 'Макаронные изделия', category: 'strengthen', kcal: 360, protein: 12, fat: 2, carbs: 72, sodium: 5 },
+            { id: 9, name: 'Рис с курицей сублимированный', category: 'strengthen', kcal: 320, protein: 25, fat: 8, carbs: 42, sodium: 380 },
+            { id: 10, name: 'Фасоль сублимированная', category: 'strengthen', kcal: 280, protein: 18, fat: 1, carbs: 50, sodium: 150 },
+            { id: 54, name: 'Чечевица красная сублимированная', category: 'strengthen', kcal: 310, protein: 24, fat: 1, carbs: 55, sodium: 160 },
+            { id: 55, name: 'Горох зелёный сублимированный', category: 'strengthen', kcal: 90, protein: 7, fat: 0, carbs: 16, sodium: 170 },
+            { id: 56, name: 'Нут сублимированный', category: 'strengthen', kcal: 320, protein: 19, fat: 5, carbs: 54, sodium: 140 },
+            { id: 57, name: 'Ячневая крупа сублимированная', category: 'strengthen', kcal: 340, protein: 10, fat: 2, carbs: 70, sodium: 8 },
+
+            // ВОССТАНОВЛЕНИЕ
+            { id: 11, name: 'Клубника сублимированная', category: 'recovery', kcal: 280, protein: 1, fat: 0, carbs: 68, sodium: 10 },
+            { id: 12, name: 'Яблоки сублимированные', category: 'recovery', kcal: 260, protein: 0.5, fat: 0, carbs: 65, sodium: 15 },
+            { id: 13, name: 'Каша гречневая сублимированная', category: 'recovery', kcal: 330, protein: 12, fat: 3, carbs: 65, sodium: 10 },
+            { id: 14, name: 'Мёд порционный', category: 'recovery', kcal: 280, protein: 0, fat: 0, carbs: 70, sodium: 5 },
+            { id: 15, name: 'Персик сублимированный', category: 'recovery', kcal: 260, protein: 1, fat: 0, carbs: 65, sodium: 8 },
+            { id: 58, name: 'Банан сублимированный', category: 'recovery', kcal: 270, protein: 1.5, fat: 0, carbs: 68, sodium: 3 },
+            { id: 59, name: 'Творог сублимированный', category: 'recovery', kcal: 340, protein: 28, fat: 18, carbs: 8, sodium: 180 },
+            { id: 60, name: 'Груша сублимированная', category: 'recovery', kcal: 250, protein: 1, fat: 0, carbs: 63, sodium: 4 },
+
+            // ЭНЕРГИЯ
+            { id: 16, name: 'Орехи ассорти сублимированные', category: 'energy', kcal: 580, protein: 20, fat: 48, carbs: 18, sodium: 15 },
+            { id: 17, name: 'Батончик энергетический', category: 'energy', kcal: 440, protein: 10, fat: 18, carbs: 60, sodium: 120 },
+            { id: 18, name: 'Сухофрукты ассорти', category: 'energy', kcal: 320, protein: 3, fat: 1, carbs: 80, sodium: 30 },
+            { id: 19, name: 'Шоколад тёмный плитка', category: 'energy', kcal: 540, protein: 8, fat: 34, carbs: 50, sodium: 20 },
+            { id: 20, name: 'Сгущённое молоко порция', category: 'energy', kcal: 310, protein: 8, fat: 8, carbs: 55, sodium: 120 },
+            { id: 61, name: 'Миндаль сублимированный', category: 'energy', kcal: 570, protein: 21, fat: 50, carbs: 20, sodium: 8 },
+            { id: 62, name: 'Кешью сублимированный', category: 'energy', kcal: 550, protein: 18, fat: 46, carbs: 28, sodium: 10 },
+            { id: 63, name: 'Изюм сублимированный', category: 'energy', kcal: 300, protein: 3, fat: 0, carbs: 75, sodium: 25 },
+            { id: 64, name: 'Энергетический гель', category: 'energy', kcal: 100, protein: 0, fat: 0, carbs: 25, sodium: 200 },
+
+            // ГИДРАТАЦИЯ
+            { id: 21, name: 'Порошок спортивный напиток', category: 'hydration', kcal: 150, protein: 0, fat: 0, carbs: 38, sodium: 450 },
+            { id: 22, name: 'Компот груша концентрат', category: 'hydration', kcal: 280, protein: 0, fat: 0, carbs: 70, sodium: 50 },
+            { id: 23, name: 'Апельсин сублимированный', category: 'hydration', kcal: 300, protein: 2, fat: 0, carbs: 76, sodium: 5 },
+            { id: 24, name: 'Кисломолочный напиток', category: 'hydration', kcal: 50, protein: 3, fat: 1, carbs: 6, sodium: 90 },
+            { id: 25, name: 'Электролитный порошок', category: 'hydration', kcal: 40, protein: 0, fat: 0, carbs: 10, sodium: 800 },
+            { id: 65, name: 'Лимонно-имбирный напиток', category: 'hydration', kcal: 60, protein: 0, fat: 0, carbs: 15, sodium: 300 },
+            { id: 66, name: 'Ягодный морс концентрат', category: 'hydration', kcal: 250, protein: 0.5, fat: 0, carbs: 62, sodium: 20 },
+            { id: 67, name: 'Зелёный чай порция', category: 'hydration', kcal: 5, protein: 0, fat: 0, carbs: 1, sodium: 10 },
+
+            // ПРОЧЕЕ / СПЕЦИАЛЬНОЕ
+            { id: 26, name: 'Белки сублимированные', category: 'strengthen', kcal: 400, protein: 80, fat: 3, carbs: 2, sodium: 300 },
+            { id: 27, name: 'Лиофилизированные овощи', category: 'light', kcal: 60, protein: 3, fat: 0, carbs: 12, sodium: 200 },
+            { id: 28, name: 'Крупа ячневая сублимированная', category: 'recovery', kcal: 340, protein: 10, fat: 2, carbs: 70, sodium: 8 },
+            { id: 29, name: 'Ягоды миксованные сублимированные', category: 'recovery', kcal: 300, protein: 2, fat: 0, carbs: 75, sodium: 12 },
+            { id: 30, name: 'Арахисовая паста порция', category: 'energy', kcal: 590, protein: 24, fat: 50, carbs: 16, sodium: 300 },
+            { id: 68, name: 'Какао-порошок', category: 'energy', kcal: 450, protein: 12, fat: 13, carbs: 68, sodium: 5 },
+            { id: 69, name: 'Сухое молоко', category: 'recovery', kcal: 500, protein: 26, fat: 27, carbs: 38, sodium: 400 },
+            { id: 70, name: 'Черника сублимированная', category: 'recovery', kcal: 310, protein: 1, fat: 0, carbs: 78, sodium: 8 },
+        ];
+
+        const CATEGORIES = {
+            light: { icon: 'fa-leaf', name: 'Лёгкая еда', desc: 'Белки, овощи' },
+            strengthen: { icon: 'fa-dumbbell', name: 'Укрепиться', desc: 'Сытные блюда' },
+            energy: { icon: 'fa-bolt', name: 'Энергия', desc: 'Калорийные' },
+            recovery: { icon: 'fa-heart', name: 'Восстановление', desc: 'Углеводы' },
+            hydration: { icon: 'fa-droplet', name: 'Гидратация', desc: 'Напитки' },
+        };
+
+        // ПЕРЕВОДЫ
+        const TRANSLATIONS = {
+            ru: {
+                homebutton: 'На главную',
+                stepLabel1: 'Категория',
+                stepLabel2: 'Продукты',
+                stepLabel3: 'Обработка',
+                stepLabel4: 'Анализ',
+                stepLabel5: 'Проверка',
+                stepLabel6: 'Сохранить',
+                step1: 'Категория рациона',
+                step1sub: 'Выберите тип питания для космической миссии',
+                step2: 'Выбор продуктов',
+                step2sub: 'Составьте оптимальный рацион из сублимированной еды',
+                step3: 'Методика обработки',
+                step3sub: 'Все продукты в космосе используют технологию сублимации',
+                step4: 'Анализ рациона',
+                step4sub: 'ML-скоринг и питательный расчёт',
+                step5: 'Проверка качества',
+                step5sub: 'ИИ Детектор для анализа состояния консервных банок и продуктов',
+                step6: 'Сохранение рациона',
+                step6sub: 'Завершение создания вашего космического меню',
+                categoryLight: 'Белки, овощи',
+                categoryStrengthen: 'Сытные блюда',
+                categoryEnergy: 'Калорийные',
+                categoryRecovery: 'Углеводы',
+                categoryHydration: 'Напитки',
+                sublimationProductsLabel: 'Сублимированные продукты',
+                nutritionValue: 'Пищевая ценность',
+                selectProducts: 'Выбранные продукты',
+                selectedList: 'Выбранные продукты',
+                foodComposition: 'Полный состав',
+                settings: 'Параметры сохранения',
+                dietName: 'Название рациона',
+                dietNamePlaceholder: 'Например: Завтрак День 1',
+                mealType: 'Тип приёма пищи',
+                breakfast: 'Завтрак',
+                lunch: 'Обед',
+                dinner: 'Ужин',
+                snack: 'Перекус',
+                detailNext: 'Просмотреть детали',
+                back: 'Назад',
+                next: 'Далее',
+                save: 'Сохранить',
+                macroEnergy: 'Энергия',
+                macroProtein: 'Белки',
+                macroFat: 'Жиры',
+                macroCarbs: 'Углеводы',
+                kcal: 'ккал',
+                grams: 'г',
+                selectCheckType: 'Выберите тип проверки:',
+                canDefects: 'Дефекты банок',
+                canIntegrity: 'Целостность и повреждения',
+                moldContamination: 'Плесень и загрязнения',
+                productCondition: 'Состояние продукта',
+                videoStream: 'Видеопоток',
+                results: 'Результаты',
+                start: 'Запустить',
+                stop: 'Остановить',
+                skipCheck: 'Пропустить проверку',
+                sublimationProducts: 'Сублимированные продукты',
+                weightInfo: '• Вес порции: на 80% легче обычной',
+                rehabInfo: '• Восстановление: добавьте воду (5 минут)',
+                storageInfo: '• Срок хранения: до 25 лет в вакууме',
+                mlBonus: '• ML-бонус: +20 баллов за технологию',
+                idealSpace: '• Идеальны для космических полётов',
+                searchPlaceholder: 'Поиск по названию...',
+                noProducts: 'Продукты не найдены',
+                readyToCheck: '✓ Готово к проверке. Нажмите "Запустить"',
+                mlScoringLabel: 'ML-скоринг и питательный расчёт',
+                caloriesExceeded: 'Превышена норма',
+                tooManyCalories: 'Слишком много калорий для одного приёма',
+                lowEnergy: 'Мало энергии',
+                needMoreCalories: 'Требуется больше калорий',
+                lowProtein: 'Дефицит белков',
+                insufficientProtein: 'Недостаточное количество протеина',
+                excellentDiet: '✓ Отличный рацион',
+                perfectlyBalanced: 'Идеально сбалансирован для космических операций',
+                goodDiet: '✓ Хороший рацион',
+                goodRatio: 'Хорошее соотношение макронутриентов',
+                acceptableDiet: '◉ Приемлемый рацион',
+                canImprove: 'Можно улучшить разнообразие продуктов',
+                weakDiet: '◉ Слабый рацион',
+                needsImprovement: 'Требует доработки и улучшения баланса',
+                inadequateDiet: '✗ Неадекватный состав',
+                needsReview: 'Требуется серьёзная переработка меню',
+                recommendRemoveHighEnergy: 'Рекомендация: Уберите высокоэнергетичные продукты (орехи, шоколад) или уменьшите порции.',
+                recommendAddEnergy: 'Рекомендация: Добавьте энергетичные продукты (орехи, фрукты, зёрна).',
+                recommendAddProtein: 'Рекомендация: Добавьте белковые продукты (курица, рыба, бобы).',
+                recommendDiversity: 'Рекомендация: Добавьте разнообразных продуктов для лучшего баланса.',
+                recommendBalance: 'Рекомендация: Увеличьте разнообразие и проверьте соотношение макросов.',
+                recommendReview: 'Рекомендация: Переберите продукты полностью, обратите внимание на баланс белков/жиров/углеводов.',
+                composition: 'Состав:',
+                analysisFormula: 'Анализ по формуле: калории, белки, жиры, углеводы, натрий',
+                highCalories: '⚠ <strong style="color: #ffaa22;">Превышено калорий!</strong>',
+                lowEnergy2: '⚠ <strong style="color: #ffaa22;">Недостаточно энергии!</strong>',
+                lowProtein2: '⚠ <strong style="color: #ffaa22;">Мало белков!</strong>',
+            },
+            en: {
+                homebutton: 'Home',
+                stepLabel1: 'Category',
+                stepLabel2: 'Products',
+                stepLabel3: 'Processing',
+                stepLabel4: 'Analysis',
+                stepLabel5: 'Check',
+                stepLabel6: 'Save',
+                step1: 'Diet Category',
+                step1sub: 'Choose a nutrition type for your space mission',
+                step2: 'Choose Products',
+                step2sub: 'Create an optimal diet from freeze-dried food',
+                step3: 'Processing Method',
+                step3sub: 'All space products use sublimation technology',
+                step4: 'Diet Analysis',
+                step4sub: 'ML scoring and nutritional calculation',
+                step5: 'Quality Check',
+                step5sub: 'AI Detector for analyzing the condition of tin cans and products',
+                step6: 'Save Diet',
+                step6sub: 'Complete your space menu',
+                categoryLight: 'Proteins, vegetables',
+                categoryStrengthen: 'Hearty dishes',
+                categoryEnergy: 'High-calorie',
+                categoryRecovery: 'Carbs',
+                categoryHydration: 'Beverages',
+                sublimationProductsLabel: 'Freeze-Dried Products',
+                nutritionValue: 'Nutritional Value',
+                selectProducts: 'Selected Products',
+                selectedList: 'Selected Products',
+                foodComposition: 'Full Composition',
+                settings: 'Save Settings',
+                dietName: 'Diet Name',
+                dietNamePlaceholder: 'Example: Breakfast Day 1',
+                mealType: 'Meal Type',
+                breakfast: 'Breakfast',
+                lunch: 'Lunch',
+                dinner: 'Dinner',
+                snack: 'Snack',
+                detailNext: 'View Details',
+                back: 'Back',
+                next: 'Next',
+                save: 'Save',
+                macroEnergy: 'Energy',
+                macroProtein: 'Proteins',
+                macroFat: 'Fats',
+                macroCarbs: 'Carbs',
+                kcal: 'kcal',
+                grams: 'g',
+                selectCheckType: 'Select inspection type:',
+                canDefects: 'Can Defects',
+                canIntegrity: 'Integrity and Damage',
+                moldContamination: 'Mold and Contamination',
+                productCondition: 'Product Condition',
+                videoStream: 'Video Stream',
+                results: 'Results',
+                start: 'Start',
+                stop: 'Stop',
+                skipCheck: 'Skip Check',
+                sublimationProducts: 'Freeze-Dried Products',
+                weightInfo: '• Weight per serving: 80% lighter than regular',
+                rehabInfo: '• Recovery: add water (5 minutes)',
+                storageInfo: '• Shelf life: up to 25 years in vacuum',
+                mlBonus: '• ML bonus: +20 points for technology',
+                idealSpace: '• Perfect for space missions',
+                searchPlaceholder: 'Search by name...',
+                noProducts: 'Products not found',
+                readyToCheck: '✓ Ready for check. Click "Start"',
+                mlScoringLabel: 'ML scoring and nutritional calculation',
+                caloriesExceeded: 'Exceeded normal',
+                tooManyCalories: 'Too many calories per meal',
+                lowEnergy: 'Low energy',
+                needMoreCalories: 'More calories needed',
+                lowProtein: 'Protein deficiency',
+                insufficientProtein: 'Insufficient protein amount',
+                excellentDiet: '✓ Excellent diet',
+                perfectlyBalanced: 'Perfectly balanced for space operations',
+                goodDiet: '✓ Good diet',
+                goodRatio: 'Good macronutrient ratio',
+                acceptableDiet: '◉ Acceptable diet',
+                canImprove: 'Can improve product variety',
+                weakDiet: '◉ Weak diet',
+                needsImprovement: 'Requires improvement and balance adjustment',
+                inadequateDiet: '✗ Inadequate composition',
+                needsReview: 'Requires serious menu revision',
+                recommendRemoveHighEnergy: 'Recommendation: Remove high-energy products (nuts, chocolate) or reduce portions.',
+                recommendAddEnergy: 'Recommendation: Add energy-rich products (nuts, fruit, grains).',
+                recommendAddProtein: 'Recommendation: Add protein products (chicken, fish, beans).',
+                recommendDiversity: 'Recommendation: Add variety of products for better balance.',
+                recommendBalance: 'Recommendation: Increase variety and check macronutrient ratio.',
+                recommendReview: 'Recommendation: Completely revise products, focus on protein/fat/carb balance.',
+                composition: 'Composition:',
+                analysisFormula: 'Analysis formula: calories, proteins, fats, carbs, sodium',
+                highCalories: '⚠ <strong style="color: #ffaa22;">Calories exceeded!</strong>',
+                lowEnergy2: '⚠ <strong style="color: #ffaa22;">Insufficient energy!</strong>',
+                lowProtein2: '⚠ <strong style="color: #ffaa22;">Low protein!</strong>',
+            },
+            kz: {
+                homebutton: 'Басқа бет',
+                stepLabel1: 'Категориясы',
+                stepLabel2: 'Өнімдер',
+                stepLabel3: 'Өңдеу',
+                stepLabel4: 'Талдау',
+                stepLabel5: 'Тексеру',
+                stepLabel6: 'Сақтау',
+                step1: 'Диета категориясы',
+                step1sub: 'Ұзақ сапарыңыз үшін тамақ түрін таңдаңыз',
+                step2: 'Өнімдер таңдау',
+                step2sub: 'Құрамасы ығысталған тамақтан оптимал диета құрыңыз',
+                step3: 'Өңдеу әдісі',
+                step3sub: 'Барлық космос өнімдері сублимация технологиясын пайдаланады',
+                step4: 'Диета талдау',
+                step4sub: 'ML ұпайы және тамақтану есабы',
+                step5: 'Сапа тексеруі',
+                step5sub: 'Консервте банкалары және өнімдердің жағдайын талдау үшін AI Детектор',
+                step6: 'Диетаны сақтау',
+                step6sub: 'Ұзақ сапарыңыз үшін менюсін аяқтаңыз',
+                categoryLight: 'Ағзам дағы, көкөністер',
+                categoryStrengthen: 'Сыпайы тағамдар',
+                categoryEnergy: 'Жоғары калорийлік',
+                categoryRecovery: 'Көмірсутектер',
+                categoryHydration: 'Ішімдіктер',
+                sublimationProductsLabel: 'Сублимациялау өнімдері',
+                nutritionValue: 'Өндіктік құнасы',
+                selectProducts: 'Таңдалған өнімдер',
+                selectedList: 'Таңдалған өнімдер',
+                foodComposition: 'Толық құрамасы',
+                settings: 'Сақтау параметрлері',
+                dietName: 'Диета атауы',
+                dietNamePlaceholder: 'Мысалы: Таңғы ас 1-күні',
+                mealType: 'Тамақ түрі',
+                breakfast: 'Таңғы ас',
+                lunch: 'Түскі ас',
+                dinner: 'Кешкі ас',
+                snack: 'Закуска',
+                detailNext: 'Мәліметтерді көр',
+                back: 'Артқа',
+                next: 'Одан әрі',
+                save: 'Сақтау',
+                macroEnergy: 'Энергия',
+                macroProtein: 'Ағзам дағы',
+                macroFat: 'Майлар',
+                macroCarbs: 'Көмірсутектер',
+                kcal: 'ккал',
+                grams: 'г',
+                selectCheckType: 'Тексеру түрін таңдаңыз:',
+                canDefects: 'Банка ақауы',
+                canIntegrity: 'Тамність және зақымдану',
+                moldContamination: 'Ғана және ластану',
+                productCondition: 'Өнім жағдайы',
+                videoStream: 'Бейне ағыны',
+                results: 'Нәтижелер',
+                start: 'Басты',
+                stop: 'Тоқтату',
+                skipCheck: 'Тексеруді өткізіп жібер',
+                sublimationProducts: 'Сублимациялау өнімдері',
+                weightInfo: '• Бір порцияның салмағы: төмпе жас 80% оңай',
+                rehabInfo: '• Қалпына келтіру: су қосыңыз (5 минут)',
+                storageInfo: '• Сақтау мерзімі: вакуумда 25 жылына дейін',
+                mlBonus: '• ML бонусы: технология үшін +20 ұпай',
+                idealSpace: '• Ғарыш миссиялары үшін идеалды',
+                searchPlaceholder: 'Атауы бойынша іздеу...',
+                noProducts: 'Өнімдер табылмады',
+                readyToCheck: '✓ Тексеруге дайын. "Басты" басыңыз',
+                mlScoringLabel: 'ML ұпайы және тамақтану есеби',
+                caloriesExceeded: 'Нормум асырылды',
+                tooManyCalories: 'Бір прием үшін тым көп калория',
+                lowEnergy: 'Аз энергия',
+                needMoreCalories: 'Құлындығында өз калории қажет',
+                lowProtein: 'Ағзам дағы дефициті',
+                insufficientProtein: 'Ағзам дағының жеткіліксіз мөлшері',
+                excellentDiet: '✓ Тамаша диета',
+                perfectlyBalanced: 'Ғарыш операциялары үшін төлік орындалды',
+                goodDiet: '✓ Жақсы диета',
+                goodRatio: 'Макронутриенттерінің жақсы қатынасы',
+                acceptableDiet: '◉ Қабылдайтын диета',
+                canImprove: 'Өнімдердің түрлеу өндіктікжіндісін өспеби',
+                weakDiet: '◉ Нөлсіз диета',
+                needsImprovement: 'Тағдырлау және балансты өпстеуді талап етеді',
+                inadequateDiet: '✗ Орынсыз құрамасы',
+                needsReview: 'Менюді ұзақ ойындау қажет',
+                recommendRemoveHighEnergy: 'Ұсыныс: Жоғары энергиялы өнімдерді (құс, үхіл) немесе порцияларды едемінде.',
+                recommendAddEnergy: 'Ұсыныс: Энергия құмалы өнімдер қосыңыз (құс, жемістер, дәндер).',
+                recommendAddProtein: 'Ұсыныс: Ағзам дағы өнімдер қосыңыз (тауық, балық, сарамай).',
+                recommendDiversity: 'Ұсыныс: Балансты жақсарту үшін өнімдердің түрлелігін көбеңіз.',
+                recommendBalance: 'Ұсыныс: Түрлеуді ұғамыңыз және макронутриенттерінің қатынасын тексеріңіз.',
+                recommendReview: 'Ұсыныс: Өнімдерді толығымен қайта қарап, ағзам дағы/майлар/көмірсутектердің балансына назар аударыңыз.',
+                composition: 'Құрамасы:',
+                analysisFormula: 'Анализ формуласы: калория, ағзам дағы, майлар, көмірсутектер, натрий',
+                highCalories: '⚠ <strong style="color: #ffaa22;">Калория асырылды!</strong>',
+                lowEnergy2: '⚠ <strong style="color: #ffaa22;">Аз энергия!</strong>',
+                lowProtein2: '⚠ <strong style="color: #ffaa22;">Аз ағзам дағы!</strong>',
+            }
+        };
+
+        // ГЛОБАЛЬНЫЙ ТЕКУЩИЙ ЯЗЫК
+        let currentLang = localStorage.getItem('cosmodiet_lang') || 'ru';
+
+        // ПЕРЕВОДЫ НАЗВАНИЙ ПРОДУКТОВ
+        const PRODUCT_NAMES = {
+            ru: {
+                1: 'Куичное филе сублимированное',
+                2: 'Форель сублимированная кусочки',
+                3: 'Овощная смесь сублимированная',
+                4: 'Шпинат сублимированный',
+                5: 'Брокколи сублимированная',
+                6: 'Говядина сублимированная кусочки',
+                7: 'Картофель пюре сублимированное',
+                8: 'Макаронные изделия',
+                9: 'Рис с курицей сублимированный',
+                10: 'Фасоль сублимированная',
+                11: 'Клубника сублимированная',
+                12: 'Яблоки сублимированные',
+                13: 'Каша гречневая сублимированная',
+                14: 'Мёд порционный',
+                15: 'Персик сублимированный',
+                16: 'Орехи ассорти сублимированные',
+                17: 'Батончик энергетический',
+                18: 'Сухофрукты ассорти',
+                19: 'Шоколад тёмный плитка',
+                20: 'Сгущённое молоко порция',
+                21: 'Порошок спортивный напиток',
+                22: 'Компот груша концентрат',
+                23: 'Апельсин сублимированный',
+                24: 'Кисломолочный напиток',
+                25: 'Электролитный порошок',
+                26: 'Белки сублимированные',
+                27: 'Лиофилизированные овощи',
+                28: 'Крупа ячневая сублимированная',
+                29: 'Ягоды миксованные сублимированные',
+                30: 'Арахисовая паста порция',
+                51: 'Минтай сублимированный',
+                52: 'Морковь сублимированная',
+                53: 'Кабачок сублимированный',
+                54: 'Чечевица красная сублимированная',
+                55: 'Горох зелёный сублимированный',
+                56: 'Нут сублимированный',
+                57: 'Ячневая крупа сублимированная',
+                58: 'Банан сублимированный',
+                59: 'Творог сублимированный',
+                60: 'Груша сублимированная',
+                61: 'Миндаль сублимированный',
+                62: 'Кешью сублимированный',
+                63: 'Изюм сублимированный',
+                64: 'Энергетический гель',
+                65: 'Лимонно-имбирный напиток',
+                66: 'Ягодный морс концентрат',
+                67: 'Зелёный чай порция',
+                68: 'Какао-порошок',
+                69: 'Сухое молоко',
+                70: 'Черника сублимированная',
+            },
+            en: {
+                1: 'Chicken fillet freeze-dried',
+                2: 'Trout freeze-dried pieces',
+                3: 'Vegetable mix freeze-dried',
+                4: 'Spinach freeze-dried',
+                5: 'Broccoli freeze-dried',
+                6: 'Beef freeze-dried pieces',
+                7: 'Potato puree freeze-dried',
+                8: 'Pasta products',
+                9: 'Rice with chicken freeze-dried',
+                10: 'Beans freeze-dried',
+                11: 'Strawberry freeze-dried',
+                12: 'Apples freeze-dried',
+                13: 'Buckwheat porridge freeze-dried',
+                14: 'Honey portion',
+                15: 'Peach freeze-dried',
+                16: 'Nuts assorted freeze-dried',
+                17: 'Energy bar',
+                18: 'Dried fruit assortment',
+                19: 'Dark chocolate bar',
+                20: 'Condensed milk portion',
+                21: 'Sports drink powder',
+                22: 'Pear compote concentrate',
+                23: 'Orange freeze-dried',
+                24: 'Fermented milk drink',
+                25: 'Electrolyte powder',
+                26: 'Proteins freeze-dried',
+                27: 'Freeze-dried vegetables',
+                28: 'Barley porridge freeze-dried',
+                29: 'Mixed berries freeze-dried',
+                30: 'Peanut butter portion',
+                51: 'Pollock freeze-dried',
+                52: 'Carrot freeze-dried',
+                53: 'Zucchini freeze-dried',
+                54: 'Red lentil freeze-dried',
+                55: 'Green peas freeze-dried',
+                56: 'Chickpeas freeze-dried',
+                57: 'Barley porridge freeze-dried',
+                58: 'Banana freeze-dried',
+                59: 'Cottage cheese freeze-dried',
+                60: 'Pear freeze-dried',
+                61: 'Almond freeze-dried',
+                62: 'Cashew freeze-dried',
+                63: 'Raisins freeze-dried',
+                64: 'Energy gel',
+                65: 'Lemon-ginger drink',
+                66: 'Berry juice concentrate',
+                67: 'Green tea portion',
+                68: 'Cocoa powder',
+                69: 'Powdered milk',
+                70: 'Blueberry freeze-dried',
+            },
+            kz: {
+                1: 'Тауық филесі сублимациялау',
+                2: 'Форель сублимациялау тағамдары',
+                3: 'Көкөніс араласуы сублимациялау',
+                4: 'Шпинат сублимациялау',
+                5: 'Броккольі сублимациялау',
+                6: 'Сиыр еттері сублимациялау тағамдары',
+                7: 'Картопількі кәсіл сублимациялау',
+                8: 'Макарон өнімдері',
+                9: 'Тауық арамы рис сублимациялау',
+                10: 'Құрақет сублимациялау',
+                11: 'Құлпынай сублимациялау',
+                12: 'Almalar сублимациялау',
+                13: 'Гречка құсамасы сублимациялау',
+                14: 'Ара салтысы бөлінісі',
+                15: 'Шабар сублимациялау',
+                16: 'Құс ассортименті сублимациялау',
+                17: 'Энергия батончигі',
+                18: 'Құрраның асортименті',
+                19: 'Қара шоколад пластинасы',
+                20: 'Сгущенное сүт бөлінісі',
+                21: 'Спорт ішімдігі ұнтағы',
+                22: 'Груша компоты концентраты',
+                23: 'Апельсин сублимациялау',
+                24: 'Сүт асыл ішімдігі',
+                25: 'Электролит ұнтағы',
+                26: 'Ағзам дағы сублимациялау',
+                27: 'Редсит көкөніс',
+                28: 'Ячмень құсамасы сублимациялау',
+                29: 'Ирлік ягодалар сублимациялау',
+                30: 'Арахистің сүт пастасы бөлінісі',
+                51: 'Минтай сублимациялау',
+                52: 'Сәбіз сублимациялау',
+                53: 'Кабачок сублимациялау',
+                54: 'Құлақ сүндік сублимациялау',
+                55: 'Жасыл бұрыш сублимациялау',
+                56: 'Нут сублимациялау',
+                57: 'Ячмень құсамасы сублимациялау',
+                58: 'Банан сублимациялау',
+                59: 'Творог сублимациялау',
+                60: 'Груша сублимациялау',
+                61: 'Миндаль сублимациялау',
+                62: 'Кешью сублимациялау',
+                63: 'Таңдалған ағзамдар сублимациялау',
+                64: 'Энергия желі',
+                65: 'Лимон-имбір ішімдігі',
+                66: 'Ягода морсы концентраты',
+                67: 'Жасыл шай бөлінісі',
+                68: 'Какао ұнтағы',
+                69: 'Құрғақ сүт',
+                70: 'Черника сублимациялау',
+            }
+        };
+
+        // ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ПЕРЕВЕДЕННОГО НАЗВАНИЯ ПРОДУКТА
+        function getProductName(product) {
+            if (PRODUCT_NAMES[currentLang] && PRODUCT_NAMES[currentLang][product.id]) {
+                return PRODUCT_NAMES[currentLang][product.id];
+            }
+            return product.name;
+        }
+
+        // STATE
+        let state = {
+            step: 1,
+            category: null,
+            products: [],
+            mealType: 'breakfast',
+            mealName: '',
+            aiModel: 'can_defect',
+            cameraStream: null,
+            aiResult: null
+        };
+
+        // ИНИЦИАЛИЗАЦИЯ
+        console.log('📄 Начало инициализации');
+        console.log('document.readyState:', document.readyState);
+        
+        function init() {
+            try {
+                console.log('🚀 init() запущена');
+                console.log('state:', state);
+                console.log('CATEGORIES:', CATEGORIES);
+                
+                // Инициализировать язык при загрузке
+                const savedLang = localStorage.getItem('cosmodiet_lang') || 'ru';
+                currentLang = savedLang;
+                if (savedLang !== 'ru') {
+                    applyLanguage(savedLang);
+                }
+                
+                // Инициализировать UI
+                console.log('→ Вызов updateUI()');
+                updateUI();
+                
+                // Инициализировать step titles и subtitles
+                const t = TRANSLATIONS[currentLang];
+                const stepTitles = {
+                    1: { title: t.step1, subtitle: t.step1sub },
+                    2: { title: t.step2, subtitle: t.step2sub },
+                    3: { title: t.step3, subtitle: t.step3sub },
+                    4: { title: t.step4, subtitle: t.step4sub },
+                    5: { title: t.step5, subtitle: t.step5sub },
+                    6: { title: t.step6, subtitle: t.step6sub }
+                };
+                
+                for (let i = 1; i <= 6; i++) {
+                    const stepContent = document.getElementById('step-' + i);
+                    if (stepContent) {
+                        const stepTitle = stepContent.querySelector('.step-title');
+                        const stepSubtitle = stepContent.querySelector('.step-subtitle');
+                        
+                        if (stepTitle && stepTitles[i]) {
+                            stepTitle.textContent = stepTitles[i].title;
+                        }
+                        if (stepSubtitle && stepTitles[i]) {
+                            stepSubtitle.textContent = stepTitles[i].subtitle;
+                        }
+                    }
+                }
+                
+                // Инициализировать step labels
+                const stepLabels = document.querySelectorAll('.step-label');
+                if (stepLabels.length >= 6) {
+                    stepLabels[0].textContent = t.stepLabel1;
+                    stepLabels[1].textContent = t.stepLabel2;
+                    stepLabels[2].textContent = t.stepLabel3;
+                    stepLabels[3].textContent = t.stepLabel4;
+                    stepLabels[4].textContent = t.stepLabel5;
+                    stepLabels[5].textContent = t.stepLabel6;
+                }
+                
+                console.log('→ Вызов renderCategories()');
+                renderCategories();
+                
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', filterProducts);
+                }
+                
+                console.log('✓ ГОТОВО - инициализация завершена успешно');
+            } catch(e) {
+                console.error('❌ ОШИБКА В init():', e.message);
+                console.error('Stack:', e.stack);
+            }
+        }
+        
+        // Вызовем init когда DOM готов
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            // DOM уже готов
+            init();
+        }
+
+        function renderCategories() {
+            console.log('🎨 renderCategories вызвана');
+            const grid = document.getElementById('categoryGrid');
+            console.log('✓ categoryGrid найдена:', !!grid);
+            console.log('✓ CATEGORIES:', Object.keys(CATEGORIES).length, 'элементов');
+            
+            if (!grid) {
+                console.error('❌ categoryGrid не найдена в DOM!');
+                return;
+            }
+            
+            try {
+                const html = Object.entries(CATEGORIES).map(([key, cat]) => `
+                    <button class="card ${state.category === key ? 'selected' : ''}" onclick="selectCategory('${key}')">
+                        <div class="card-icon"><i class="fas ${cat.icon}"></i></div>
+                        <div class="card-title">${cat.name}</div>
+                        <div class="card-desc">${cat.desc}</div>
+                    </button>
+                `).join('');
+                
+                grid.innerHTML = html;
+                console.log('✓ Отрендерено', grid.children.length, 'карточек');
+            } catch(e) {
+                console.error('❌ Ошибка при рендеринге:', e.message);
+            }
+        }
+
+        function selectCategory(cat) {
+            state.category = cat;
+            state.products = [];
+            state.step = 2;
+            updateUI();
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('productsList');
+            const noMsg = document.getElementById('noProducts');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (!list || !noMsg || !searchInput) {
+                return;
+            }
+            
+            const search = searchInput.value.toLowerCase();
+
+            let filtered = PRODUCTS.filter(p => p.category === state.category);
+            if (search) filtered = filtered.filter(p => getProductName(p).toLowerCase().includes(search));
+
+            if (!filtered.length) {
+                list.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+
+            noMsg.style.display = 'none';
+            list.innerHTML = filtered.map(p => `
+                <div class="product-card ${state.products.includes(p.id) ? 'selected' : ''}" onclick="toggleProduct(${p.id})">
+                    <div class="checkbox">
+                        ${state.products.includes(p.id) ? '<i class="fas fa-check"></i>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${getProductName(p)}</div>
+                        <div class="product-meta">
+                            <span><i class="fas fa-flash" style="margin-right: 4px; color: #00d9ff;"></i>${p.kcal} ккал</span>
+                            <span><i class="fas fa-egg" style="margin-right: 4px; color: #00d9ff;"></i>Б: ${p.protein}г</span>
+                            <span><i class="fas fa-droplet" style="margin-right: 4px; color: #00d9ff;"></i>Ж: ${p.fat}г</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function toggleProduct(id) {
+            const idx = state.products.indexOf(id);
+            if (idx >= 0) state.products.splice(idx, 1);
+            else state.products.push(id);
+            renderProducts();
+        }
+
+        function calculateScore() {
+            if (!state.products.length) return 0;
+            
+            const prods = state.products.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+            if (!prods.length) return 0;
+
+            let score = 40;
+
+            // КАЛОРИИ: оценка без штрафов
+            const totalKcal = prods.reduce((s, p) => s + p.kcal, 0);
+            if (totalKcal >= 300 && totalKcal <= 700) score += 25;
+            else if (totalKcal >= 200 && totalKcal < 300) score += 15;
+            else if (totalKcal >= 700 && totalKcal <= 1200) score += 18;
+
+            // БЕЛКИ: чем больше - тем лучше
+            const totalProtein = prods.reduce((s, p) => s + p.protein, 0);
+            if (totalProtein >= 20 && totalProtein <= 70) score += 20;
+            else if (totalProtein >= 10 && totalProtein < 20) score += 10;
+            else if (totalProtein > 70) score += 15;
+
+            // ЖИРЫ: хороший баланс
+            const totalFat = prods.reduce((s, p) => s + p.fat, 0);
+            if (totalFat >= 5 && totalFat <= 50) score += 10;
+            else if (totalFat > 50) score += 5;
+
+            // УГЛЕВОДЫ: нужны энергия
+            const totalCarbs = prods.reduce((s, p) => s + p.carbs, 0);
+            if (totalCarbs >= 30 && totalCarbs <= 150) score += 10;
+            else if (totalCarbs > 150) score += 5;
+
+            // НАТРИЙ: контроль но без штрафов
+            const avgSodium = prods.reduce((s, p) => s + p.sodium, 0) / prods.length;
+            if (avgSodium < 250) score += 8;
+            else if (avgSodium >= 250 && avgSodium <= 400) score += 10;
+            else if (avgSodium > 400) score += 5;
+
+            return Math.min(100, Math.max(0, score));
+        }
+
+        function updateStep4() {
+            const t = TRANSLATIONS[currentLang];
+            const prods = state.products.map(id => PRODUCTS.find(p => p.id === id));
+            const kcal = prods.reduce((s, p) => s + p.kcal, 0);
+            const protein = prods.reduce((s, p) => s + p.protein, 0);
+            const fat = prods.reduce((s, p) => s + p.fat, 0);
+            const carbs = prods.reduce((s, p) => s + p.carbs, 0);
+
+            document.getElementById('nutritionGrid').innerHTML = `
+                <div class="nutrition-card">
+                    <div class="nutrition-label">${t.macroEnergy}</div>
+                    <div class="nutrition-value">${kcal}</div>
+                    <div style="font-size: 0.7rem; color: rgba(224,231,255,0.5);">${t.kcal}</div>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">${t.macroProtein}</div>
+                    <div class="nutrition-value">${protein}</div>
+                    <div style="font-size: 0.7rem;">${t.grams}</div>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">${t.macroFat}</div>
+                    <div class="nutrition-value">${fat}</div>
+                    <div style="font-size: 0.7rem;">${t.grams}</div>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">${t.macroCarbs}</div>
+                    <div class="nutrition-value">${carbs}</div>
+                    <div style="font-size: 0.7rem;">${t.grams}</div>
+                </div>
+            `;
+
+            const score = calculateScore();
+            const totalKcal = prods.reduce((s, p) => s + p.kcal, 0);
+            const totalProtein = prods.reduce((s, p) => s + p.protein, 0);
+            const totalFat = prods.reduce((s, p) => s + p.fat, 0);
+            const totalCarbs = prods.reduce((s, p) => s + p.carbs, 0);
+
+            let text, description, warning = '', recommendation = '';
+            
+            // Проверка калорий
+            if (totalKcal > 1200) {
+                warning = t.highCalories + '<br>';
+                recommendation = t.recommendRemoveHighEnergy + '<br>';
+                text = t.caloriesExceeded;
+                description = t.tooManyCalories;
+            } else if (totalKcal < 200) {
+                warning = t.lowEnergy2 + '<br>';
+                recommendation = t.recommendAddEnergy + '<br>';
+                text = t.lowEnergy;
+                description = t.needMoreCalories;
+            } else if (totalProtein < 15) {
+                warning = t.lowProtein2 + '<br>';
+                recommendation = t.recommendAddProtein + '<br>';
+                text = t.lowProtein;
+                description = t.insufficientProtein;
+            } else {
+                // Нормальные значения
+                if (score >= 85) {
+                    text = t.excellentDiet;
+                    description = t.perfectlyBalanced;
+                } else if (score >= 75) {
+                    text = t.goodDiet;
+                    description = t.goodRatio;
+                } else if (score >= 65) {
+                    text = t.acceptableDiet;
+                    description = t.canImprove;
+                    recommendation = t.recommendDiversity + '<br>';
+                } else if (score >= 55) {
+                    text = t.weakDiet;
+                    description = t.needsImprovement;
+                    recommendation = t.recommendBalance + '<br>';
+                } else {
+                    text = t.inadequateDiet;
+                    description = t.needsReview;
+                    recommendation = t.recommendReview + '<br>';
+                }
+            }
+
+            document.getElementById('scoreNumber').textContent = score;
+            document.getElementById('scoreText').textContent = text;
+            document.getElementById('scoreTips').innerHTML = `
+                <strong>${warning}${description}</strong><br><br>
+                ${recommendation}
+                <strong style="color: #00d9ff;">${t.composition}</strong> ${t.macroEnergy}: ${totalKcal}${t.kcal} | ${t.macroProtein}: ${totalProtein}${t.grams} | ${t.macroFat}: ${totalFat}${t.grams} | ${t.macroCarbs}: ${totalCarbs}${t.grams}<br>
+                <small style="opacity:0.7;">${t.analysisFormula}</small>
+            `;
+            document.getElementById('selectedList').innerHTML = prods.map(p => `
+                <div style="padding: 12px; background: rgba(0,217,255,0.05); border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #00d9ff;">
+                    <strong>${getProductName(p)}</strong><br>
+                    <span style="font-size: 0.8rem; color: rgba(224,231,255,0.6);">${p.kcal} ${t.kcal} • ${t.macroProtein}: ${p.protein}${t.grams}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateStep6() {
+            const prods = state.products.map(id => PRODUCTS.find(p => p.id === id));
+            const kcal = prods.reduce((s, p) => s + p.kcal, 0);
+            const protein = prods.reduce((s, p) => s + p.protein, 0);
+            const fat = prods.reduce((s, p) => s + p.fat, 0);
+            const carbs = prods.reduce((s, p) => s + p.carbs, 0);
+
+            document.getElementById('finalNutrition').innerHTML = `
+                <div class="nutrition-card">
+                    <div class="nutrition-label">Энергия</div>
+                    <div class="nutrition-value">${kcal}</div>
+                    <span>ккал</span>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">Белки</div>
+                    <div class="nutrition-value">${protein}</div>
+                    <span>г</span>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">Жиры</div>
+                    <div class="nutrition-value">${fat}</div>
+                    <span>г</span>
+                </div>
+                <div class="nutrition-card">
+                    <div class="nutrition-label">Углеводы</div>
+                    <div class="nutrition-value">${carbs}</div>
+                    <span>г</span>
+                </div>
+            `;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('[id$="-tab"]').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+        }
+
+        function switchModel(model) {
+            state.aiModel = model;
+            document.querySelectorAll('.tabs .tab').forEach(el => el.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+        }
+
+        let detectionRunning = false;
+        let detectionInterval = null;
+
+        function selectDetectionModel(model) {
+            console.log(`🔄 Переключение на модель: ${model}`);
+            state.aiModel = model;
+            // Обновить классы активности
+            document.querySelectorAll('.quality-model-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            const modelCard = document.getElementById('model-' + model);
+            if (modelCard) {
+                modelCard.classList.add('active');
+                console.log(`✓ Активирована карточка: model-${model}`);
+            } else {
+                console.error(`❌ Карточка модели не найдена: model-${model}`);
+            }
+        }
+
+        function openCamera() {
+            if (detectionRunning) {
+                console.warn('⚠ Камера уже открыта');
+                return;
+            }
+            
+            console.log('🎥 Открываю камеру...');
+            detectionRunning = true;
+            document.getElementById('cameraStartBtn').disabled = true;
+            document.getElementById('cameraStopBtn').disabled = false;
+            
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.getElementById('detectionCanvas');
+            
+            if (!canvas) {
+                console.error('❌ Canvas не найден в DOM');
+                detectionRunning = false;
+                document.getElementById('cameraStartBtn').disabled = false;
+                document.getElementById('cameraStopBtn').disabled = true;
+                return;
+            }
+            
+            navigator.mediaDevices.getUserMedia({ 
+                video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+                audio: false 
+            })
+                .then(stream => {
+                    console.log('✓ Поток камеры получен');
+                    state.cameraStream = stream;
+                    video.srcObject = stream;
+                    video.style.display = 'none';
+                    canvas.style.display = 'block';
+                    
+                    video.onloadedmetadata = () => {
+                        console.log(`✓ Видео загружено, размер: ${video.videoWidth}x${video.videoHeight}`);
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        console.log(`✓ Canvas установлен: ${canvas.width}x${canvas.height}`);
+                        video.play();
+                        console.log('✓ Видео проигрывается');
+                        startContinuousDetection();
+                    };
+                    
+                    video.onerror = (err) => {
+                        console.error('❌ Ошибка видео:', err);
+                    };
+                })
+                .catch(err => {
+                    console.error('❌ Ошибка получения камеры:', err);
+                    alert('Ошибка камеры: ' + err.message);
+                    detectionRunning = false;
+                    document.getElementById('cameraStartBtn').disabled = false;
+                    document.getElementById('cameraStopBtn').disabled = true;
+                });
+        }
+
+        function startContinuousDetection() {
+            console.log('🎯 Запускаю непрерывную детекцию...');
+            document.getElementById('detectionResult').innerHTML = '<p style="color: #00d9ff;">⏳ Камера включена. Анализирую продукты...</p>';
+            
+            let frameCount = 0;
+            
+            detectionInterval = setInterval(() => {
+                if (!detectionRunning) {
+                    console.log('⏸ Детекция остановлена');
+                    return;
+                }
+                
+                frameCount++;
+                const video = document.getElementById('cameraVideo');
+                const canvas = document.getElementById('detectionCanvas');
+                
+                if (!video || !canvas) {
+                    console.error(`❌ Видео или canvas не найдены: video=${!!video}, canvas=${!!canvas}`);
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('❌ Context 2D не получен');
+                    return;
+                }
+                
+                try {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                } catch (drawErr) {
+                    console.error('❌ Ошибка при рисовании видео на canvas:', drawErr);
+                    return;
+                }
+                
+                // Конвертируем canvas в base64
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                const model = state.aiModel || 'can_defect';
+                
+                if (frameCount % 5 === 0) {  // Логируем каждый 5-й кадр чтобы не спамить
+                    console.log(`🎯 Кадр ${frameCount}: отправляю детекцию (${model}), размер=${imageData.length} символов`);
+                }
+                
+                fetch('/api/detect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imageData,
+                        model: model
+                    })
+                })
+                    .then(r => {
+                        if (frameCount % 5 === 0) {
+                            console.log(`📡 Ответ сервера: статус=${r.status}`);
+                        }
+                        if (!r.ok) {
+                            throw new Error(`HTTP ${r.status}`);
+                        }
+                        return r.json();
+                    })
+                    .then(data => {
+                        if (frameCount % 5 === 0) {
+                            console.log(`✓ Получены данные от сервера:`, {
+                                model: data.model,
+                                detections_count: data.detections?.length || 0,
+                                has_image: !!data.annotated_image
+                            });
+                        }
+                        
+                        // Если ошибка в ответе
+                        if (data.error) {
+                            console.error('❌ Ошибка из сервера:', data.error);
+                            if (frameCount % 10 === 0) {
+                                document.getElementById('detectionResult').innerHTML = 
+                                    `<p style="color: #ff4444;">❌ Ошибка сервера: ${data.error}</p>`;
+                            }
+                            return;
+                        }
+                        
+                        state.aiResult = data;
+                        
+                        // Если есть аннотированное изображение, выводим его
+                        if (data.annotated_image) {
+                            const img = new Image();
+                            img.onload = () => {
+                                if (detectionRunning) {
+                                    ctx.drawImage(img, 0, 0);
+                                    if (frameCount % 5 === 0) {
+                                        console.log('✓ Аннотированное изображение отображено');
+                                    }
+                                }
+                            };
+                            img.onerror = (err) => {
+                                console.error('❌ Ошибка загрузки аннотированного изображения:', err);
+                            };
+                            img.src = data.annotated_image;
+                        }
+                        
+                        updateDetectionText(data);
+                    })
+                    .catch(err => {
+                        console.error('❌ Ошибка детекции:', err);
+                        if (frameCount % 10 === 0) {
+                            document.getElementById('detectionResult').innerHTML = 
+                                `<p style="color: #ff4444;">❌ Ошибка сети: ${err.message}</p>`;
+                        }
+                    });
+            }, 500);
+            
+            console.log('✓ Интервал детекции установлен на 500мс');
+        }
+
+        function drawDetections(data, canvas) {
+            const ctx = canvas.getContext('2d');
+            
+            if (!data || !data.detections || !Array.isArray(data.detections)) return;
+            
+            const colors = ['#00d9ff', '#9d4edd', '#ff006e', '#ffbe0b'];
+            
+            data.detections.forEach((det, i) => {
+                if (!det.box) return;
+                
+                const [x1, y1, x2, y2] = det.box;
+                const width = x2 - x1;
+                const height = y2 - y1;
+                const color = colors[i % colors.length];
+                
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x1, y1, width, height);
+                
+                ctx.fillStyle = color;
+                ctx.font = 'bold 12px Arial';
+                const text = `${det.class} ${(det.confidence * 100).toFixed(0)}%`;
+                const textWidth = ctx.measureText(text).width;
+                ctx.fillRect(x1, y1 - 20, textWidth + 4, 18);
+                ctx.fillStyle = '#000';
+                ctx.fillText(text, x1 + 2, y1 - 5);
+            });
+        }
+
+        function updateDetectionText(data) {
+            const modelIcon = state.aiModel === 'can_defect' ? '<i class="fas fa-bottle" style="color: #00d9ff; margin-right: 8px;"></i>' : '<i class="fas fa-biohazard" style="color: #9d4edd; margin-right: 8px;"></i>';
+            const modelName = state.aiModel === 'can_defect' ? 'Дефекты банок' : 'Плесень и загрязнения';
+            
+            let html = `<p style="color: #00d9ff; margin-bottom: 15px; font-weight: 600; font-size: 1.05rem;">${modelIcon}${modelName}</p>`;
+            
+            if (data && data.detections && data.detections.length > 0) {
+                html += `<div style="color: #ffaa22; font-weight: 600; margin-bottom: 15px;"><strong><i class="fas fa-crosshairs" style="margin-right: 6px;"></i>Обнаружено: ${data.detections.length}</strong></div>`;
+                const uniqueClasses = [...new Set(data.detections.map(d => d.class))];
+                uniqueClasses.forEach(cls => {
+                    const items = data.detections.filter(d => d.class === cls);
+                    const count = items.length;
+                    const avgConf = (items.reduce((s, d) => s + d.confidence, 0) / count * 100).toFixed(0);
+                    const maxConf = (Math.max(...items.map(d => d.confidence)) * 100).toFixed(0);
+                    html += `<div style="padding: 12px; background: linear-gradient(135deg, rgba(255,170,34,0.15), rgba(255,170,34,0.05)); margin-bottom: 10px; border-left: 4px solid #ffaa22; border-radius: 8px;">
+                        <strong style="color: #ffaa22;">${cls}</strong><br>
+                        <small style="color: rgba(224,231,255,0.7);">Найдено: ${count} | Уверенность: ${avgConf}% (макс ${maxConf}%)</small>
+                    </div>`;
+                });
+            } else {
+                html += '<p style="color: #00ff00; font-weight: 600;"><strong><i class="fas fa-check-circle" style="margin-right: 6px;"></i>Объект не найден</strong></p><small style="color: rgba(224,231,255,0.5);">Изделие в хорошем состоянии</small>';
+            }
+            
+            document.getElementById('detectionResult').innerHTML = html;
+        }
+
+        function closeCamera() {
+            detectionRunning = false;
+            if (detectionInterval) clearInterval(detectionInterval);
+            if (state.cameraStream) {
+                state.cameraStream.getTracks().forEach(t => t.stop());
+            }
+            document.getElementById('cameraVideo').style.display = 'none';
+            document.getElementById('detectionCanvas').style.display = 'block';
+            document.getElementById('cameraStartBtn').disabled = false;
+            document.getElementById('cameraStopBtn').disabled = true;
+            document.getElementById('detectionResult').innerHTML = '<p style="color: rgba(224,231,255,0.6);">✓ Готово к проверке. Нажмите "Запустить"</p>';
+        }
+
+        function setMealType(type) {
+            state.mealType = type;
+            document.querySelectorAll('#step-6 .tabs .tab').forEach(el => el.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+        }
+
+        function nextStep() {
+            if (state.step === 1 && !state.category) {
+                alert('Выберите категорию');
+                return;
+            }
+            if (state.step === 2 && !state.products.length) {
+                alert('Выберите хотя бы один продукт');
+                return;
+            }
+            if (state.step === 3) updateStep4();
+            if (state.step === 6) {
+                state.mealName = document.getElementById('mealName').value || 'Рацион ' + new Date().toLocaleDateString();
+                updateStep6();
+                saveMeal();
+                return;
+            }
+
+            state.step++;
+            updateUI();
+        }
+
+        function prevStep() {
+            state.step--;
+            updateUI();
+        }
+
+        function updateUI() {
+            try {
+                // Скрыть все шаги
+                document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+                
+                // Показать текущий шаг
+                const currentStep = document.getElementById('step-' + state.step);
+                if (currentStep) {
+                    currentStep.classList.add('active');
+                } else {
+                    console.warn('⚠️ Шаг step-' + state.step + ' не найден в DOM');
+                }
+
+                // Обновить индикаторы
+                for (let i = 1; i <= 6; i++) {
+                    const circle = document.getElementById('circle-' + i);
+                    if (circle) {
+                        circle.classList.remove('active', 'completed');
+                        if (i < state.step) circle.classList.add('completed');
+                        if (i === state.step) circle.classList.add('active');
+                    }
+                }
+
+                // Обновить прогресс
+                const progress = ((state.step - 1) / 5) * 100;
+                const progressBar = document.getElementById('progressBar');
+                if (progressBar) {
+                    progressBar.style.width = progress + '%';
+                }
+
+                // Кнопки
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const t = TRANSLATIONS[currentLang];
+                if (prevBtn) prevBtn.style.display = state.step > 1 ? 'block' : 'none';
+                if (nextBtn) nextBtn.innerHTML = state.step === 6 ? 
+                    '<i class="fas fa-save"></i> ' + t.save : '<i class="fas fa-arrow-right"></i> ' + t.next;
+            } catch(e) {
+                console.error('❌ Ошибка в updateUI():', e.message);
+            }
+        }
+
+        function saveMeal() {
+            // Вычисляем питательные вещества из выбранных продуктов
+            const prods = state.products.map(id => PRODUCTS.find(p => p.id === id));
+            const kcal = prods.reduce((s, p) => s + p.kcal, 0);
+            const protein = prods.reduce((s, p) => s + p.protein, 0);
+            const fat = prods.reduce((s, p) => s + p.fat, 0);
+            const carbs = prods.reduce((s, p) => s + p.carbs, 0);
+            
+            // Получаем текущего пользователя если он авторизован
+            const currentUser = JSON.parse(localStorage.getItem('cosmodiet_user')) || { id: 'guest', name: 'Гость' };
+            
+            const meal = {
+                id: Date.now(),
+                userId: currentUser.id,
+                name: state.mealName,
+                type: state.mealType,
+                category: state.category,
+                products: state.products.map(id => PRODUCTS.find(p => p.id === id)),
+                score: calculateScore(),
+                calories: Math.round(kcal),
+                protein: Math.round(protein * 10) / 10,
+                fat: Math.round(fat * 10) / 10,
+                carbs: Math.round(carbs * 10) / 10,
+                date: new Date().toLocaleString('ru-RU')
+            };
+
+            let meals = JSON.parse(localStorage.getItem('cosmodiet_history') || '[]');
+            meals.push(meal);
+            localStorage.setItem('cosmodiet_history', JSON.stringify(meals));
+
+            alert('Рацион сохранён: ' + state.mealName);
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
